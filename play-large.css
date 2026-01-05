@@ -1,0 +1,10 @@
+
+#pot {
+    bottom: 20px;
+    right: 560px;
+}
+
+
+#player {
+    transform: matrix(1.8, 0, 0, 1.8, -114, -182);
+}

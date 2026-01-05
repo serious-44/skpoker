@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<script>
+    hrefVars = {};
+    hrefVars.id1 = "hd/4037-ines";
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        hrefVars[key] = value;
+    });
+</script>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" href="edit.css">
+</head>
+<body>
+
+<div id="page">
+    <div class="horizontal-splitter" id="main">
+        <div class="splitter-content" id="video-area">
+            <div id="main-videoframe">
+                <video id="main-video" prefetch>
+                    <script>
+                        document.write(`
+                            <source src="${hrefVars.id1}.mp4" type="video/mp4">
+                        `);
+                    </script>
+                </video>
+            </div>
+            <div id="action-buttons">
+                <div id="pieces">
+                    <input type="radio" name="pieces" id="pieces4" checked> 4
+                    <input type="radio" name="pieces" id="pieces3"> 3
+                    <input type="radio" name="pieces" id="pieces2"> 2
+                    <input type="radio" name="pieces" id="pieces1"> 1
+                    <input type="radio" name="pieces" id="pieces0"> 0
+                    <input type="checkbox" id="zoom"> 5 zoom
+                </div>
+                <button id="intro">i intro</button>
+                <button id="take">t take</button>
+                <button id="take-good">g good</button>
+                <button id="take-bad">b bad</button>
+                <button id="drop">d drop</button>
+                <button id="drop-throw">r throw</button>
+                <button id="win">w win</button>
+                <button id="win-youlose">q youlose</button>
+                <button id="lose">l lose</button>
+                <button id="lose-youwin">p youwin</button>
+                <button id="show">s show</button>
+                <button id="show-cards">c cards</button>
+                <button id="show-cards-low">e low</button>
+                <button id="show-cards-high">h high</button>
+                <button id="show-drink">k drink</button>
+                <button id="show-no">n no</button>
+                <button id="show-cards-no">j cards no</button>
+                <button id="show-strip">x strip</button>
+                <button id="trash">a trash</button>
+                <button id="off0">1-&gt;0</button>
+                <button id="off1">2-&gt;1</button>
+                <button id="off2">3-&gt;2</button>
+                <button id="off3">4-&gt;3</button>
+                <button id="on1">0-&gt;1</button>
+                <button id="on2">1-&gt;2</button>
+                <button id="on3">2-&gt;3</button>
+                <button id="on4">3-&gt;4</button>
+                <button id="bye">7 bye</button>
+                <button id="bye-cards">8 bye cards</button>
+                <button id="broke">9 broke</button>
+            </div>
+            <div id="start-videoframe">
+                <video id="start-video" prefetch>
+                    <script>
+                        document.write(`
+                            <source src="${hrefVars.id1}.mp4" type="video/mp4">
+                        `);
+                    </script>
+                </video>
+            </div>
+            <div id="end-videoframe">
+                <video id="end-video" prefetch>
+                    <script>
+                        document.write(`
+                            <source src="${hrefVars.id1}.mp4" type="video/mp4">
+                        `);
+                    </script>
+                </video>
+            </div>
+        </div>
+        <div class="horizontal-splitbar"></div>
+        <div class="splitter-content" id="editor-area">
+            <textarea id="editor-mark" disabled>=></textarea>
+            <textarea id="editor" spellcheck="false">00:00:00:000</textarea>
+        </div>
+    </div>
+    <div id="bottom-area">
+        <canvas id="video-info" height="30"></canvas>
+        <canvas id="start-info" height="30"></canvas>
+        <input class="slider" id="video-position" type="range" min="0" max="100" value="0">
+        <div id="video-buttons">
+            <button id="video-start" title="home">┃&lt;</button>
+            <button id="video-prev-snap4" title="shift arrow left">│&lt;</button>
+            <button id="video-prev-snap1" title="ctrl arrow left">╷&lt;</button>
+            <button id="video-prev" title="arrow left">&lt;</button>
+            <button id="video-play" title="shift space">play</button>
+            <button id="video-play-snap" title="space">play to ╷</button>
+            <button id="video-play-snap4" title="m">play to │</button>
+            <button id="video-next" title="arrow right">&gt;</button>
+            <button id="video-next-snap1" title="ctrl arrow right">&gt;╷</button>
+            <button id="video-next-snap4" title="shift arrow right">&gt;│</button>
+            <button id="video-end" title="end">&gt;┃</button>
+            <div style="padding-right: 0;">clipstart:</div><div id="video-starttime" style="padding-left: 2px;">00:00:00:000 frame 0</div>
+            <div style="padding-right: 0;">current:</div><div id="video-time" style="padding-left: 2px;">00:00:00:000 frame 0</div>
+        </div>
+        <div id="editor-buttons">
+            <button id="save" disabled>save</button>
+            <button id="back" style="margin-right: 40px;">exit</button>
+            <button id="set-start"style="margin-right: 40px;">set start to current</button>
+            <input type="checkbox" id="editor-add" checked><div style="padding-left: 2px; padding-right: 2px;">add new end time</div>
+            <button id="editor-prev" title="arrow up">↑ prev</button>
+            <button id="editor-next" title="arrow down">↓ next</button>
+            <!--<input type="checkbox" id="editor-sync" checked>-->
+            <button id="editor-set-time" title="enter">↲ set start end</button>
+            <button id="editor-set-start" title="shift arrow up">⇧ set start</button>
+            <button id="editor-set-end" title="shift arrow down">⇩ set current</button>
+        </div>
+    </div>
+</div>
+
+<div id="start-overlay"></div>
+
+<script src="edit.js"></script> 
+
+</body>
+</html>

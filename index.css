@@ -1,0 +1,142 @@
+* {
+    background-color: white;
+    color: black;
+}
+
+#start-buttons {
+    position:fixed;
+    top: 5px;
+    right: 5px;
+    width: 210px;
+    display: flex;
+    flex-direction: column;
+}
+
+#start-buttons div {
+    margin: 10px;
+    font: 17px sans-serif;
+}
+
+#start-buttons button {
+    height: 100px;
+    width: 200px;
+    margin: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #808080;
+    border-radius: 5px;
+    cursor: pointer;
+
+    background-color: white;
+    border-color: black;
+    color: black;
+    font: 20px sans-serif;
+}
+
+#start-buttons button:disabled, #start-buttons button:disabled:hover {
+    background-color: #80808010;
+    color: #20202030;
+    border-color: #ffffff40;
+    cursor: default;
+}
+
+#start-buttons button:hover {
+    background-color: #ffff0080;
+}
+
+#start-buttons button:active {
+    background-color: #ffff00;
+}
+
+#opponents {
+    position: relative;
+    width: calc(100% - 210px);
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+}
+
+#opponents div {
+    position: relative;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.opponent-image {
+    width: 100%;
+    margin: 0;
+}
+
+#opponents div .opponent-name {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    margin: 0;
+    padding: 2px 10px 2px 10px;
+    background-color: #ffffffc0;
+    border-radius: 5px;
+    font: 17px sans-serif;
+}
+
+#opponents div.opponent-selected .opponent-name {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    margin: 0;
+    padding: 2px 10px 2px 10px;
+    background-color: #ffff00;
+    border-radius: 5px;
+    font: 17px sans-serif;
+}
+
+@media screen and (max-width: 1500px) {
+    .opponent-table {
+        display: none;
+    }
+}
+
+#opponents div .opponent-table {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 5px;
+    font: 12px sans-serif;
+}
+
+#opponents div .opponent-table:hover {
+    background-color: white;
+}
+
+.opponent-links a {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+#opponents div .opponent-info {
+    margin: 0;
+    padding: 2px 2px 2px 2px;
+    background-color: #ffffffc0;
+    border-radius: 5px;
+    font: 10px sans-serif;
+}
+
+#opponents div .opponent-data, #opponents div .opponent-desc {
+    background-color: transparent;
+}
+
+#opponents div .opponent-table .opponent-links, #opponents div .opponent-table a {
+    padding: 2px 2px 2px 7px;
+    font: 10px sans-serif;
+    margin: 0;
+    color: transparent;
+    background-color: transparent;
+}
+
+#opponents div .opponent-table:hover .opponent-links, #opponents div .opponent-table:hover a {
+    margin: 0;
+    color: black;
+}

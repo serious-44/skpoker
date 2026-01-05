@@ -1,0 +1,388 @@
+/*************************************************************************************************************************** splitter */
+
+* {
+    margin:0;
+    padding:0;
+    border-radius: 0;
+}
+
+.horizontal-splitter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: calc(50% - 5px)  10px  calc(50% - 5px);
+    grid-template-rows: 100%;
+}
+
+.vertical-splitter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: calc(50% - 5px)  10px  calc(50% - 5px);
+    grid-template-columns: 100%;
+}
+
+.vertical-splitbar {
+    cursor: ns-resize;
+}
+
+.horizontal-splitbar {
+    cursor: ew-resize;
+}
+
+.splitter-content {
+    position: relative;
+}
+
+.horizontal {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+}
+
+.vertical {
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 100%;
+}
+
+.opponent-image {
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    object-fit: cover;
+    border: 5px solid white;
+    filter: grayscale(1) contrast(0.2);
+}
+
+/*************************************************************************************************************************** pot */
+
+#pot {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+}
+
+#pot #pot-money {
+    font: 20px monospace;
+    width:100%;
+    text-align: center;
+    background-color: #ffffff80;
+    border-radius: 5px;
+    margin: 5px 0 10px 0;
+}
+
+#drink-img {
+    background-color: #ffffff40;
+    opacity: 0.5;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#drink-img:hover {
+    opacity: 1;
+    background-color: #ffffffc0;
+}
+
+#drink-img:active {
+    opacity: 1;
+    background-color: #ffffff;
+}
+
+/*************************************************************************************************************************** opponent */
+
+.opponent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.opponent-videoframe {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+}
+
+.opponent-video-1 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left;
+}
+
+.opponent-video-2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.opponent-video-4 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.opponent-info {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: grid;
+    grid-template-columns: 48px 5px 48px 5px 48px 5px 48px 5px 48px;
+    background-color: #ffffff80;
+    padding: 10px 10px 5px 10px;
+    border-radius: 10px;
+}
+
+.opponent-info .card-1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.opponent-info .card-2 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.opponent-info .card-3 {
+    grid-column: 5;
+    grid-row: 1;
+}
+
+.opponent-info .card-4 {
+    grid-column: 7;
+    grid-row: 1;
+}
+
+.opponent-info .card-5 {
+    grid-column: 9;
+    grid-row: 1;
+}
+
+.opponent .stake {
+    grid-column: 1 / span 9;
+    grid-row: 2;
+    margin: 5px 0 0 0;
+    text-align: right;
+    font: 17px sans-serif;
+}
+
+/*************************************************************************************************************************** player */
+
+#player {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.deck {
+    display: flex;
+}
+
+.deck .card {
+    margin: 5px;
+}
+
+.player {
+    display: grid;
+    grid-template-columns: 48px 5px 48px 5px 48px 5px 48px 5px 48px;
+    background-color: #ffffff80;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#player-bet1 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#player-bet2 {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+#player-bet3 {
+    grid-column: 5;
+    grid-row: 2;
+}
+
+#player-bet4 {
+    grid-column: 7;
+    grid-row: 2;
+}
+
+#player-bet5 {
+    grid-column: 9;
+    grid-row: 2;
+}
+
+#player-fold {
+    grid-column: 1 / span 3;
+    grid-row: 3;
+    margin: 20px 0 20px 0;
+}
+
+#player-call {
+    grid-column: 5 / span 3;
+    grid-row: 3;
+    margin: 20px 0 20px 0;
+}
+
+#player-draw {
+    grid-column: 1 / span 3;
+    grid-row: 5;
+    margin: 20px 0 0 0;
+}
+
+#player-stake {
+    grid-column: 5 / span 5;
+    grid-row: 5;
+    margin: 20px 0 0 0;
+    text-align: right;
+    font: 17px sans-serif;
+}
+
+#player-card-1 {
+    grid-column: 1;
+    grid-row: 4;
+}
+
+#player-card-2 {
+    grid-column: 3;
+    grid-row: 4;
+}
+
+#player-card-3 {
+    grid-column: 5;
+    grid-row: 4;
+}
+
+#player-card-4 {
+    grid-column: 7;
+    grid-row: 4;
+}
+
+#player-card-5 {
+    grid-column: 9;
+    grid-row: 4;
+}
+
+#player-info {
+    grid-column: 1 / span 9;
+    grid-row: 1;
+    margin: 0 0 20px 0;
+    font: 12px sans-serif;
+}
+
+#player-ok {
+    grid-column: 9;
+    grid-row: 1;
+    margin-top: 120px;
+    height: 24px;
+}
+
+#player-wait {
+    grid-column: 9;
+    grid-row: 1;
+    width: 100%;
+    margin: 0 0 20px 0;
+}
+
+#player-wait img {
+    margin-top: 120px;
+    margin-left: 20px;
+}
+
+/*************************************************************************************************************************** buttons */
+
+button {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #000000c0;
+    border-radius: 5px;
+    background-color: #ffffffc0;
+    color: black;
+    font: 14px sans-serif;
+}
+
+button:disabled, button:disabled:hover {
+    background-color: #80808010;
+    color: #20202030;
+    border-color: #ffffff40;
+}
+
+button:hover {
+    background-color: #ffffff;
+    color: black;
+}
+
+button:active {
+    background-color: #ffff00;
+    color: black;
+}
+
+#player-ok {
+    background-color: #ffff00c0;
+    border-color: black;
+    color: black;
+}
+
+#player-ok:hover {
+    background-color: #ffff00;
+    color: black;
+}
+
+#player-ok:disabled, #player-ok:disabled:hover {
+    background-color: #80808010;
+    color: #20202030;
+    border-color: #ffffff40;
+}
+
+#player-start {
+    grid-column: 1 / span 9;
+    grid-row: 1;
+    height: 50px;
+    background-color: #ffff00c0;
+    border-color: black;
+    color: black;
+    font: 20px sans-serif;
+    margin: 120px 0 20px 0;
+}
+
+#player-load {
+    grid-column: 1 / span 9;
+    grid-row: 1;
+}
+
+#player-start:hover {
+    background-color: #ffff00;
+    color: black;
+}
+
+#fullscreen {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 0 10px 0 10px;
+    font: 20px sans-serif;
+}
+
+#quit {
+    font: 20px sans-serif;
+    width:100%;
+}

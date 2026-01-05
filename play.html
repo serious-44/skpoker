@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<script>
+    hrefVars = {};
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        hrefVars[key] = value;
+    });
+</script>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="play.css">
+<script>
+    document.write(`<link rel="stylesheet" href="play-${"style" in hrefVars ? hrefVars.style : "small"}.css">`);
+</script>
+</head>
+<body>
+
+<script>
+    const selectedOpponents = [];
+    const selectedPreviews = [];
+    for (let i of [1, 2, 3, 4]) {
+        if (`id${i}` in hrefVars) {
+            selectedOpponents.push(hrefVars[`id${i}`]);
+            selectedPreviews.push(hrefVars[`preview${i}`]);
+        }
+    }
+    if (!selectedOpponents.length) {
+        selectedOpponents.push("hd/4148-isabella");
+        selectedPreviews.push("4148");
+    }
+
+    const loadedFromLocalFile = {}; //Internetbrowsers are not allowed to read local text files, but can load scrips from local files.  
+
+    function opponentHtml(pos, style) {
+        return `
+            <script src='${selectedOpponents[pos]}.js'><${"/"}script>
+            <div class="opponent" id="opponent-${pos+1}">
+                <div class="opponent-videoframe" id="opponent-${pos+1}-videoframe">
+                    <video class="opponent-video-${style}" id="opponent-${pos+1}-video" width="100%" height="100%" prefetch>
+                        <source src="${selectedOpponents[pos]}.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="opponent-info" id="opponent-${pos+1}-info">
+                    <img class="card-1" id="opponent-${pos+1}-card-1" src="img/cards/transparent.png" width="48" height="76"> 
+                    <img class="card-2" id="opponent-${pos+1}-card-2" src="img/cards/transparent.png" width="48" height="76"> 
+                    <img class="card-3" id="opponent-${pos+1}-card-3" src="img/cards/transparent.png" width="48" height="76"> 
+                    <img class="card-4" id="opponent-${pos+1}-card-4" src="img/cards/transparent.png" width="48" height="76"> 
+                    <img class="card-5" id="opponent-${pos+1}-card-5" src="img/cards/transparent.png" width="48" height="76"> 
+                    <div class="stake" id="opponent-${pos+1}-stake">
+                        <span id="opponent-${pos+1}-money">$1000</span>
+                        <img id="opponent-${pos+1}-cloth-4" src="img/misc/shirt.png" width="14" height="12">
+                        <img id="opponent-${pos+1}-cloth-3" src="img/misc/shirt.png" width="14" height="12">
+                        <img id="opponent-${pos+1}-cloth-2" src="img/misc/shirt.png" width="14" height="12">
+                        <img id="opponent-${pos+1}-cloth-1" src="img/misc/shirt.png" width="14" height="12">
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    if (selectedOpponents.length == 1) {
+        document.write(opponentHtml(0, 1));
+    } else if (selectedOpponents.length == 2) {
+        document.write(`
+            <div class="horizontal-splitter">
+                <div class="splitter-content">
+                    ${opponentHtml(0, 2)}
+                </div>
+                <div class="horizontal-splitbar"></div>
+                <div class="splitter-content">
+                    ${opponentHtml(1, 2)}
+                </div>
+            </div>
+        `);
+    } else if (selectedOpponents.length == 3) {
+        document.write(`
+            <div class="horizontal-splitter">
+                <div class="splitter-content">
+                    <div class="vertical-splitter">
+                        <div class="splitter-content">
+                            ${opponentHtml(0, 4)}
+                        </div>
+                        <div class="vertical-splitbar"></div>
+                        <div class="splitter-content">
+                            ${opponentHtml(1, 4)}
+                        </div>
+                    </div>
+                </div>
+                <div class="horizontal-splitbar"></div>
+                <div class="splitter-content">
+                    ${opponentHtml(2, 4)}
+                </div>
+            </div>
+        `);
+    } else {
+        document.write(`
+            <div class="horizontal-splitter">
+                <div class="splitter-content">
+                    <div class="vertical-splitter">
+                        <div class="splitter-content">
+                            ${opponentHtml(0, 4)}
+                        </div>
+                        <div class="vertical-splitbar"></div>
+                        <div class="splitter-content">
+                            ${opponentHtml(1, 4)}
+                        </div>
+                    </div>
+                </div>
+                <div class="horizontal-splitbar"></div>
+                <div class="splitter-content">
+                    <div class="vertical-splitter">
+                        <div class="splitter-content">
+                            ${opponentHtml(2, 4)}
+                        </div>
+                        <div class="vertical-splitbar"></div>
+                        <div class="splitter-content">
+                            ${opponentHtml(3, 4)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+</script>
+
+<button id="fullscreen">Fullscreen</button>
+
+<div id="pot" id="pot">
+    <img id="pot-img" src="img/coins/0.png" width="125" height="125">
+    <div id="pot-money" hidden>$0</div>
+    <img id="drink-img" src="img/misc/glass.png" width="125" height="125" hidden>
+    <button id="quit">Quit</button>
+</div>
+
+<div id="start-overlay">
+<script>
+    function loadExternalPreview(preview) {
+        let img = document.getElementById(`img-${preview}`);
+        //console.log (`load external preview https://strippokerhd.com/galeria/${preview}/rank.jpg`);
+        //img.src = `https://strippokerhd.com/galeria/${preview}/rank.jpg`
+    }
+
+    if (selectedOpponents.length == 1) {
+        document.write(`<img class="opponent-image" id="img-${selectedPreviews[0]}" src="preview/${selectedPreviews[0]}.jpg" onerror="loadExternalPreview(${selectedPreviews[0]})">`);
+    } else if (selectedOpponents.length == 2) {
+        document.write(`
+            <div class="horizontal">
+                <img class="opponent-image" id="img-${selectedPreviews[0]}" src="preview/${selectedPreviews[0]}.jpg" onerror="loadExternalPreview(${selectedPreviews[0]})">
+                <img class="opponent-image" id="img-${selectedPreviews[1]}" src="preview/${selectedPreviews[1]}.jpg" onerror="loadExternalPreview(${selectedPreviews[1]})">
+            </div>
+        `);
+    } else if (selectedOpponents.length == 3) {
+        document.write(`
+            <div class="horizontal">
+                <div class="vertical">
+                    <img class="opponent-image" id="img-${selectedPreviews[0]}" src="preview/${selectedPreviews[0]}.jpg" onerror="loadExternalPreview(${selectedPreviews[0]})">
+                    <img class="opponent-image" id="img-${selectedPreviews[1]}" src="preview/${selectedPreviews[1]}.jpg" onerror="loadExternalPreview(${selectedPreviews[1]})">
+                </div>
+                <img class="opponent-image" id="img-${selectedPreviews[2]}" src="preview/${selectedPreviews[2]}.jpg" onerror="loadExternalPreview(${selectedPreviews[2]})">
+            </div>
+        `);
+    } else {
+        document.write(`
+            <div class="horizontal">
+                <div class="vertical">
+                    <img class="opponent-image" id="img-${selectedPreviews[0]}" src="preview/${selectedPreviews[0]}.jpg" onerror="loadExternalPreview(${selectedPreviews[0]})">
+                    <img class="opponent-image" id="img-${selectedPreviews[1]}" src="preview/${selectedPreviews[1]}.jpg" onerror="loadExternalPreview(${selectedPreviews[1]})">
+                </div>
+                <div class="vertical">
+                    <img class="opponent-image" id="img-${selectedPreviews[2]}" src="preview/${selectedPreviews[2]}.jpg" onerror="loadExternalPreview(${selectedPreviews[2]})">
+                    <img class="opponent-image" id="img-${selectedPreviews[3]}" src="preview/${selectedPreviews[3]}.jpg" onerror="loadExternalPreview(${selectedPreviews[3]})">
+                </div>
+            </div>
+        `);
+    }
+</script>
+
+</div>
+
+<div class="player" id="player">
+    <button id="player-fold" disabled>Fold</button>
+    <button id="player-draw" disabled>$10 Draw</button>
+    <button id="player-call" disabled>$10 Call</button>
+    <button id="player-bet1" disabled>$10<br>&nbsp;<br>Bet</button>
+    <button id="player-bet2" disabled>$10<br>+<br>$10</button>
+    <button id="player-bet3" disabled>$10<br>+<br>$20</button>
+    <button id="player-bet4" disabled>$10<br>+<br>$50</button>
+    <button id="player-bet5" disabled>$10<br>+<br>$100</button>
+    <div id="player-stake">
+        <span id="player-money">$1000</span>
+        <img id="player-cloth-4" src="img/misc/shirt.png" width="14" height="12">
+        <img id="player-cloth-3" src="img/misc/shirt.png" width="14" height="12">
+        <img id="player-cloth-2" src="img/misc/shirt.png" width="14" height="12">
+        <img id="player-cloth-1" src="img/misc/shirt.png" width="14" height="12">
+    </div>
+    <img class="card-1" id="player-card-1" src="img/cards/transparent.png" width="48" height="76"> 
+    <img class="card-2" id="player-card-2" src="img/cards/transparent.png" width="48" height="76"> 
+    <img class="card-3" id="player-card-3" src="img/cards/transparent.png" width="48" height="76"> 
+    <img class="card-4" id="player-card-4" src="img/cards/transparent.png" width="48" height="76"> 
+    <img class="card-5" id="player-card-5" src="img/cards/transparent.png" width="48" height="76"> 
+    <img id="player-load" src="img/misc/icons8-clock.apng"  width="190" height="190">
+    <button id="player-start" hidden>Start Game</button>
+    <div id="player-wait" hidden><img src="img/misc/icons8-hourglass.apng"  width="24" height="24"></div>
+    <div id="player-info" hidden>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>Waiting for the ladies...</div>
+    <button id="player-ok" hidden>Ok</button>
+</div>
+
+<script src="play.js"></script> 
+
+</body>
+</html>
