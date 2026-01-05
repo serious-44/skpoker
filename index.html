@@ -423,8 +423,8 @@
     function loadExternalPreview(preview) {
         let img = document.getElementById(`img-${preview}`);
         //console.log (`load external preview https://strippokerhd.com/galeria/${preview}/rank.jpg`);
-        //img.src = `https://strippokerhd.com/galeria/${preview}/rank.jpg`
-        // FIXME remove eventlistener
+        img.src = `https://strippokerhd.com/galeria/${preview}/rank.jpg`
+        img.onerror = null;
     }
 
     selectedOpponents = [];
@@ -434,12 +434,12 @@
         if (selectedOpponents.includes(opponent)) {
             selectedOpponents.splice(selectedOpponents.indexOf(opponent), 1);
             selectedPreviews.splice(selectedPreviews.indexOf(preview), 1);
-            console.log(`opponent-${opponent} opponent-unselected`)
+            //console.log(`opponent-${opponent} opponent-unselected`)
             document.getElementById(`opponent-${opponent}`).className = "opponent-unselected";
         } else {
             selectedOpponents.push(opponent);
             selectedPreviews.push(preview);
-            console.log(`opponent-${opponent} opponent-selected`)
+            //console.log(`opponent-${opponent} opponent-selected`)
             document.getElementById(`opponent-${opponent}`).className = "opponent-selected";
         }
         document.getElementById("button-small").disabled = selectedOpponents.length == 0;

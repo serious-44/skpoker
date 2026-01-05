@@ -138,7 +138,8 @@
     function loadExternalPreview(preview) {
         let img = document.getElementById(`img-${preview}`);
         //console.log (`load external preview https://strippokerhd.com/galeria/${preview}/rank.jpg`);
-        //img.src = `https://strippokerhd.com/galeria/${preview}/rank.jpg`
+        img.src = `https://strippokerhd.com/galeria/${preview}/rank.jpg`
+        img.onerror = null;
     }
 
     if (selectedOpponents.length == 1) {

@@ -1,11 +1,11 @@
 "use strict";
 
-const cheatBetterCards = true;
-const cheatStupidOpponents = true;
+const cheatBetterCards = false;
+const cheatStupidOpponents = false;
 const playIdleVideos = true;
 
 function debug(id, text) {
-    console.log(`[${id}] ${text}`)
+    //console.log(`[${id}] ${text}`)
 }
 
 function error(id, text) {
