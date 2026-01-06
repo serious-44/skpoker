@@ -1,11 +1,12 @@
 "use strict";
 
-const cheatBetterCards = false;
-const cheatStupidOpponents = false;
-const playIdleVideos = true;
+let cheatBetterCards = false;
+let cheatOpponentsDontFold = false;
+
+let playIdleVideos = true;
 
 function debug(id, text) {
-    //console.log(`[${id}] ${text}`)
+    console.log(`[${id}] ${text}`)
 }
 
 function error(id, text) {
@@ -228,17 +229,27 @@ class Agent {
             this.ui.card3.src = "img/cards/transparent.png";
             this.ui.card4.src = "img/cards/transparent.png";
             this.ui.card5.src = "img/cards/transparent.png";
+            this.ui.card1.style.backgroundColor = null;
+            this.ui.card2.style.backgroundColor = null;
+            this.ui.card3.style.backgroundColor = null;
+            this.ui.card4.style.backgroundColor = null;
+            this.ui.card5.style.backgroundColor = null;
         } else if (this.state >= State.BetFirst) {
             this.ui.card1.src = this.cardsHidden ? "img/cards/flipside.png" : this.hand[0].img;
             this.ui.card2.src = this.cardsHidden ? "img/cards/flipside.png" : this.hand[1].img;
             this.ui.card3.src = this.cardsHidden ? "img/cards/flipside.png" : this.hand[2].img;
             this.ui.card4.src = this.cardsHidden ? "img/cards/flipside.png" : this.hand[3].img;
             this.ui.card5.src = this.cardsHidden ? "img/cards/flipside.png" : this.hand[4].img;
-            this.ui.card1.style.opacity = this.hand[0].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 0.9;
-            this.ui.card2.style.opacity = this.hand[1].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 0.9;
-            this.ui.card3.style.opacity = this.hand[2].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 0.9;
-            this.ui.card4.style.opacity = this.hand[3].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 0.9;
-            this.ui.card5.style.opacity = this.hand[4].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 0.9;
+            this.ui.card1.style.opacity = this.hand[0].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 1;
+            this.ui.card2.style.opacity = this.hand[1].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 1;
+            this.ui.card3.style.opacity = this.hand[2].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 1;
+            this.ui.card4.style.opacity = this.hand[3].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 1;
+            this.ui.card5.style.opacity = this.hand[4].inapt || this.state >= State.Fold || this.cardsHidden ? 0.5 : 1;
+            this.ui.card1.style.backgroundColor = this.hand[0].inapt || this.state >= State.Fold || this.cardsHidden ? null : "black";
+            this.ui.card2.style.backgroundColor = this.hand[1].inapt || this.state >= State.Fold || this.cardsHidden ? null : "black";
+            this.ui.card3.style.backgroundColor = this.hand[2].inapt || this.state >= State.Fold || this.cardsHidden ? null : "black";
+            this.ui.card4.style.backgroundColor = this.hand[3].inapt || this.state >= State.Fold || this.cardsHidden ? null : "black";
+            this.ui.card5.style.backgroundColor = this.hand[4].inapt || this.state >= State.Fold || this.cardsHidden ? null : "black";
         }
     }
 
@@ -324,7 +335,6 @@ class Opponent extends Agent {
     clipEndTime = null;
     stepEndTime = null;
     clipEndTime = null;
-    lastVideoEnd = 0;
     showTimer = null;
 
     constructor(index, id) {
@@ -355,16 +365,12 @@ class Opponent extends Agent {
             info4: document.getElementById(`opponent-${this.index+1}-info-4`)
         }
         debug(this.id, `duration ${this.ui.video.duration} buffered ${this.ui.video.buffered}`);
-    }
-
-    initCallbacks() {
         this.ui.card1.addEventListener("click", this.cardHandler);
         this.ui.card2.addEventListener("click", this.cardHandler);
         this.ui.card3.addEventListener("click", this.cardHandler);
         this.ui.card4.addEventListener("click", this.cardHandler);
         this.ui.card5.addEventListener("click", this.cardHandler);
         this.ui.video.addEventListener('timeupdate', this.videoUpdateHandler);
-        //this.ui.video.addEventListener('canplay', this.videoLoadedHandler);
     }
 
     cardHandler = () => {
@@ -372,14 +378,6 @@ class Opponent extends Agent {
         this.cardsHidden = !this.cardsHidden;
         this.showCards();
     }
-
-
-    // videoLoadedHandler = () => { //Hack, show first frame of intro until start button clicked
-    //     let clip = this.clips["intro-any-any-any"][4][0];
-    //     debug(this.id, `set first frame to ${clip}`);
-    //     this.ui.video.currentTime = clip.startTime;
-    //     this.ui.video.removeEventListener('canplay', this.videoLoadedHandler);
-    // }
 
     videoUpdateHandler = () => {
         if (this.playingVideo && this.ui.video.currentTime >= this.playEndTime) {
@@ -411,13 +409,13 @@ class Opponent extends Agent {
 
     videoEnded() {
         this.playingVideo = false; 
+        this.playingSound = false; 
         this.steppingVideo = false;
         this.currentClip = null;
         this.ui.video.currentTime = this.clipEndTime;
         if (this.state == State.Intro) {
             this.state = State.Deal;
         }
-        this.lastVideoEnd = Date.now();
         this.checkPlayingQueue();
     }
 
@@ -426,7 +424,7 @@ class Opponent extends Agent {
         this.playVideo("intro");
     }
 
-    playVideo(action, mod = "any", zoom = game.zoom ? "zoom" : "none", quiet = game.opponents.some((o) => o != this && o.playingVideo) ? "quiet" : "any", section = this.clothes) {
+    playVideo(action, mod = "any", zoom = game.zoom ? "zoom" : "none", quiet = game.opponents.some((o) => o != this && o.playingSound) ? "quiet" : "any", section = this.clothes) {
         let variants = [`${action}-any-any-any`, `${action}-any-any-${quiet}`, 
                         `${action}-any-${zoom}-any`, `${action}-any-${zoom}-${quiet}`,
                         `${action}-${mod}-any-any`, `${action}-${mod}-any-${quiet}`, 
@@ -467,6 +465,7 @@ class Opponent extends Agent {
             this.playEndTime = this.currentClip.endTime - 10 * this.frameTime;
             //debug(this.id, `video start ${this.currentClip.action} ${this.currentClip.startTime.toFixed(3)} play:${this.playEndTime.toFixed(3)} step:${this.stepEndTime.toFixed(3)} last:${this.clipEndTime.toFixed(3)}`);
             this.playingVideo = true;
+            this.playingSound = this.currentClip.quiet == "none";
             this.steppingVideo = false;
             if (this.currentClip.startTime < this.playEndTime) {
                 this.ui.video.currentTime = this.currentClip.startTime;
@@ -495,22 +494,16 @@ class Opponent extends Agent {
 
     deal() {
         super.deal();
-        if (cheatStupidOpponents) {
-            this.playVideo("take");
-        }
         //play video after draw()
     }
 
     activate() {
-        if (cheatStupidOpponents) {
-            this.bet(0);
-            return;
-        }
-
         if (game.agents.some((a) => a.state == State.Call)) {
             this.activateCall()
         } else {
             let raise = 0;
+            let rnd = Math.random();
+            let canFold = !cheatOpponentsDontFold || game.player.state >= State.Fold;
             if (this.evaluation.hierarchy >= Deck.hierarchy.Three) raise = 20;
             if (this.evaluation.hierarchy >= Deck.hierarchy.Flush) raise = 50;
             if (this.evaluation.hierarchy >= Deck.hierarchy.Four) raise = 100;
@@ -520,11 +513,11 @@ class Opponent extends Agent {
                 if (this.evaluation.hierarchy < Deck.hierarchy.Pair) mod = "bad";
                 if (this.evaluation.hierarchy >= Deck.hierarchy.Three) mod = "good";
                 this.playVideo("take", mod);
-            } else if (this.evaluation.hierarchy < Deck.hierarchy.Pair && Math.random() > 0.5) {
+            } else if (canFold && this.evaluation.hierarchy < Deck.hierarchy.Pair && rnd > 0.3) {
                 this.fold();
                 this.playVideo("drop");
-            } else if (this.money <= game.minWager + raise || Math.random() > this.evaluation.value / Deck.hierarchy.Flush || Math.random() > 0.95) {
-                debug(this.id, `call with ${this.evaluation.value} ${Deck.hierarchy.Flush}`)
+            } else if (this.money <= game.minWager + raise || (canFold && (rnd > 0.2 && rnd > this.evaluation.value / Deck.hierarchy.Straight || rnd > 0.95))) {
+                debug(this.id, `call with ${rnd.toFixed(2)} ${this.evaluation.value}/${Deck.hierarchy.Straight}`)
                 this.call();
             } else {
                 this.bet(raise);
@@ -542,12 +535,12 @@ class Opponent extends Agent {
     }
 
     wins() {
+        super.wins();
         this.playVideo("win"); //FIXME youlose
         while (this.clothes < this.getClothes()) {
             this.clothes++;
             this.playVideo("on");
         }
-        super.wins();
     }
 
     loses() {
@@ -626,9 +619,6 @@ class Player extends Agent {
             bet5: document.getElementById(`player-bet5`),
             info: document.getElementById(`player-info`),
         }
-    }
-
-    initCallbacks() {
         this.ui.card1.addEventListener("click", this.card1handler);
         this.ui.card2.addEventListener("click", this.card2handler);
         this.ui.card3.addEventListener("click", this.card3handler);
@@ -958,10 +948,6 @@ class Game {
             o.initUI();
         }
         this.player.initUI();
-        for (let o of this.opponents) {
-            o.initCallbacks();
-        }
-        this.player.initCallbacks();
 
         this.ui = {
             quit: document.getElementById("quit"),
@@ -1019,7 +1005,8 @@ class Game {
 
     quit() {
         if (!this.started || this.quitCounter > 0) {
-            location.href = "index.html";
+            this.waitExit = true;
+            this.stateChanged();
         } else {
             this.quitCounter++;
             this.ui.quit.style.backgroundColor = "red";

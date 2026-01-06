@@ -10,7 +10,7 @@ Skpoker is a webapp that runs entirely in your browser and does not require a we
 
 For each opponent, you need a video and a file with the timestamps of the individual clips.
 
-The game comes with timestamps for 100 opponents and a rudimentary tool for additional opponents. For a list of the included opponents, open index.html in your browser.
+The game comes with timestamps for 100 opponents and a rudimentary tool for additional opponents. You can see the list of the included opponents in the hd directory. And as soon as you open index.html.
 
 Check out https://f95zone.to/threads/virtual-strip-virtual-poker-games.4450 for tips on how to download and decode the videos.
 
@@ -52,4 +52,4 @@ Then select your new opponent in your web browser and click on “Edit Timestamp
 
 The basic idea is – use the space bar to play the video. It will stop at the next scene cut. This is usually also the end of the clip, and all you have to do is click on the button with the most appropriate classification.
 
-The videos are quite confusing at first. And the only documentation on how skpoker uses the clips is the source code. But over time, your hands will know where to click.
+The videos are quite confusing at first. And the only documentation on how skpoker uses the clips is the source code. But after a while, your hands will know where to click, and it will take you about an hour to create the cut marks.

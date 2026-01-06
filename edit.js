@@ -90,9 +90,10 @@ class Editor {
             on2:            ["on2",             null,     () => this.insertTimestampText("on", null, 2, "ignore")],
             on3:            ["on3",             null,     () => this.insertTimestampText("on", null, 3, "ignore")],
             on4:            ["on4",             null,     () => this.insertTimestampText("on", null, 4, "ignore")],
-            bye:            ["bye",             "Digit7", () => this.insertTimestampText("bye")],
-            byeCards:       ["bye-cards",       "Digit8", () => this.insertTimestampText("bye", "cards")],
-            broke:          ["broke",           "Digit9", () => this.insertTimestampText("broke", null, 0, "ignore")],
+            bye:            ["bye",             "Digit6", () => this.insertTimestampText("bye")],
+            byeCards:       ["bye-cards",       "Digit7", () => this.insertTimestampText("bye", "cards")],
+            broke:          ["broke",           "Digit8", () => this.insertTimestampText("broke", null, 0, "ignore")],
+            end:            ["end",             "Digit9", () => this.insertTimestampText("-", "end", 0, "ignore")],
 
             videoInfo:      ["video-info"],
             startInfo:      ["start-info"],
@@ -418,7 +419,7 @@ class Editor {
             //let start = c.lines[c.row].slice(0, 12);
             let l1 = `${this.formatTime(this.startTime)} ${action.padEnd(5, " ")} ${pieces} ${(mod ? mod : "").padEnd(7, " ")} ${zoom === true ? "zoom" : "    "} ${quiet ? "quiet" : "     "}`;
             c.lines[c.row] = l1;
-            if (this.ui.editorAdd.checked) {
+            if (this.ui.editorAdd.checked && mod != "end") {
                 c.row++;
                 let l2 = this.formatTime();
                 c.lines.splice(c.row, 0, l2);

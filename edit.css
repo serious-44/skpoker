@@ -265,6 +265,10 @@ body {
 }
 #broke {
     grid-column: 11;
+    grid-row: 3;
+}
+#end {
+    grid-column: 11;
     grid-row: 4;
 }
 
