@@ -2,7 +2,7 @@
 
 <script>
     hrefVars = {};
-    hrefVars.id1 = "hd/4037-ines";
+    hrefVars.id1 = "4037-ines";
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
         hrefVars[key] = value;
     });
@@ -23,7 +23,7 @@
                 <video id="main-video" prefetch>
                     <script>
                         document.write(`
-                            <source src="${hrefVars.id1}.mp4" type="video/mp4">
+                            <source src="hd/${hrefVars.id1}.mp4" type="video/mp4">
                         `);
                     </script>
                 </video>
@@ -73,7 +73,7 @@
                 <video id="start-video" prefetch>
                     <script>
                         document.write(`
-                            <source src="${hrefVars.id1}.mp4" type="video/mp4">
+                            <source src="hd/${hrefVars.id1}.mp4" type="video/mp4">
                         `);
                     </script>
                 </video>
@@ -82,7 +82,7 @@
                 <video id="end-video" prefetch>
                     <script>
                         document.write(`
-                            <source src="${hrefVars.id1}.mp4" type="video/mp4">
+                            <source src="hd/${hrefVars.id1}.mp4" type="video/mp4">
                         `);
                     </script>
                 </video>

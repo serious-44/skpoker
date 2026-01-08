@@ -16,7 +16,7 @@ class Editor {
     started = false;
     dirty = false;
 
-    frameTime = 1/25;
+    fps = null;
     duration = 0;
     startTime = 0;
     currentTime = 0;
@@ -35,10 +35,6 @@ class Editor {
         this.id = hrefVars.id1;
 
         this.initUI();
-
-        this.duration = this.roundFrame(this.ui.mainVideo.duration);
-        this.ui.videoPosition.max = this.frameNumber(this.duration);
-        this.ui.videoPosition.value = 0;
 
         this.initVideoInfo();
     }
@@ -179,8 +175,12 @@ class Editor {
     }
 
     async initVideoInfo() {
-        let myObject = await fetch(`http://${server}/gettime?id=${this.id}`);
+        let myObject = await fetch(`http://${server}/fps?id=${this.id}`);
         let txt = await myObject.text();
+        this.fps = parseFloat(txt)
+
+        myObject = await fetch(`http://${server}/gettime?id=${this.id}`);
+        txt = await myObject.text();
         this.setLines(0, 0, 0, txt.split("\n"))
         this.dirty = false;
         this.checkButtons();
@@ -188,6 +188,10 @@ class Editor {
         myObject = await fetch(`http://${server}/sceneinfo?id=${this.id}`);
         this.frameInfo = await myObject.bytes();
         this.renderVideoInfo();
+
+        this.duration = this.roundFrame(this.ui.mainVideo.duration);
+        this.ui.videoPosition.max = this.frameNumber(this.duration);
+        this.ui.videoPosition.value = 0;
 
         this.ui.startOverlay.style.display = "none";
         this.started = true;
@@ -317,7 +321,7 @@ class Editor {
     }
 
     roundFrame(time) {
-        let r = Math.round(time / this.frameTime) * this.frameTime;
+        let r = Math.round(time * this.fps) / this.fps;
         //debug ("Video", `round time ${time} to ${r}`);
         return r;
     }
@@ -332,18 +336,18 @@ class Editor {
     }
 
     addFrame(time, add) {
-        let r = this.roundFrame(time + add * this.frameTime);
-        if (r >= this.duration) r = this.duration - this.frameTime;
+        let r = this.roundFrame(time + add / this.fps);
+        if (r >= this.duration) r = this.duration - 1 / this.fps;
         if (r < 0) r = 0;
         return r;
     }
 
     frameNumber(ts = this.currentTime) {
-        return Math.round(ts / this.frameTime);
+        return Math.round(ts * this.fps);
     }
 
     frameTimestamp(ts) {
-        return Math.round(ts) * this.frameTime;
+        return Math.round(ts) / this.fps;
     }
 
     formatTime(ts = this.currentTime) {

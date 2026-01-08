@@ -16,7 +16,7 @@ def error(id, info, ex = None):
 
 
 class VideoProcessor:
-    fps = 25
+    fps = None
 
     scenes01 = None
     scenes04 = None
@@ -29,14 +29,15 @@ class VideoProcessor:
         #FIXME test avi mp4 
 
     def ts2frame(self, ts):
-        return round(float(ts) * self.fps)
+        return round(float(ts) * float(self.fps))
 
     def getScenes(self):
         if self.scenes04:
             return (self.scenes01, self.scenes04)
         
         try:
-            cmd = ['ffmpeg', '-i', f"{self.id}.mp4", "-filter:v", "select='gt(scene,0.03)',showinfo", "-f", "null", "-"]
+            #cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.03)',showinfo", "-f", "null", "-"]
+            cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.04)',showinfo", "-f", "null", "-"]
             log(self.id, "Scan scenes 0.05 {cmd}")
             result = subprocess.run(cmd , capture_output=True, text=True)
             lines = result.stderr.splitlines()
@@ -46,7 +47,7 @@ class VideoProcessor:
                 if m:
                     self.scenes01.append(self.ts2frame(m.group(1)))
 
-            cmd = ['ffmpeg', '-i', f"{self.id}.mp4", "-filter:v", "select='gt(scene,0.2)',showinfo", "-f", "null", "-"]
+            cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.2)',showinfo", "-f", "null", "-"]
             log(self.id, "Scan scenes 0.2 {cmd}")
             result = subprocess.run(cmd, capture_output=True, text=True)
             lines = result.stderr.splitlines()
@@ -66,7 +67,8 @@ class VideoProcessor:
             return self.loudness
 
         try:
-            cmd = ['ffmpeg', '-i', f"{self.id}.mp4", "-ac", "1", "-sample_fmt", "s16", "-ar", "2500", "-f", "wav", "-"]
+            ar = str(round(float(self.fps) * 100))
+            cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-ac", "1", "-sample_fmt", "s16", "-ar", ar, "-f", "wav", "-"]
             log(self.id, f"Scan audio {cmd}")
             result = subprocess.run(cmd, capture_output=True)
             w = wave.open(io.BytesIO(result.stdout))
@@ -121,6 +123,27 @@ class VideoProcessor:
         self.frameinfo = res
         return self.frameinfo
 
+    def getFps(self):
+        if self.fps:
+            return self.fps
+        
+        try:
+            cmd = ['ffprobe', f"hd/{self.id}.mp4"]
+            log(self.id, "Scan fps {cmd}")
+            result = subprocess.run(cmd , capture_output=True, text=True)
+            lines = result.stderr.splitlines()
+            self.scenes01 = []
+            for l in lines:
+                m = re.match(r".*, ([0-9.]+) fps,.*", l)
+                if m:
+                    self.fps = m.group(1)
+
+        except Exception as e:
+            error(self.id, "Can't read fps", e)
+            return 0
+
+        return self.fps
+
 #vp = VideoProcessor("hd/4217-ashley")
 #vp.getScenes()
 #vp.getLoudness()
@@ -139,6 +162,18 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
         global videoProcessor
 
         log("HttpServer", f"serve GET {self.path}")
+        m = re.match(r"/fps[?]id=(.+)", self.path)
+        if m:
+            log("HttpServer", f"Fps {m.group(1)}")
+            self.init(m.group(1))
+            self.send_response(200)
+            self.send_header('Content-type', 'application/sceneinfo')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(videoProcessor.getFps().encode('utf-8'))
+            log("HttpServer", f"Fps {m.group(1)} done")
+            return            
+
         m = re.match(r"/sceneinfo[?]id=(.+)", self.path)
         if m:
             log("HttpServer", f"Sceneinfo {m.group(1)}")
@@ -154,12 +189,13 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
         m = re.match(r"/gettime[?]id=(.+)", self.path)
         if m:
             log("HttpServer", f"Get Time {m.group(1)}")
+            self.init(m.group(1))
             self.send_response(200)
             self.send_header('Content-type', 'text/plain')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             try:
-                with open(f"{m.group(1)}.js") as f:
+                with open(f"hd/{m.group(1)}.js") as f:
                     for l in f:
                         if re.match(r"^\d\d:\d\d:\d\d:\d\d\d", l):
                             self.wfile.write(bytes(l, "utf-8"))
@@ -183,10 +219,11 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             length = int(self.headers['Content-Length'])
             content = self.rfile.read(length)
             
-            with open(f"{m.group(1)}.js", 'w') as f:
+            with open(f"hd/{m.group(1)}.js", 'w') as f:
+                f.write(f'fpsFromLocalFile["{name}"] = {videoProcessor.getFps()};\n')
                 f.write(f'loadedFromLocalFile["{name}"] = `\n')
                 f.write(content.decode("utf-8"))
-                f.write("\n`")
+                f.write("\n;`\n")
 
             self.send_response(200)
             self.send_header('Content-type', 'text/plain')

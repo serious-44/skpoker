@@ -326,7 +326,7 @@ class Agent {
 class Opponent extends Agent {
 
     clips = {};
-    frameTime = 1/25;
+    frameTime = 1/25; //FIXME old *.js don't include fps
 
     playingQueue = [];
     playingVideo = false;
@@ -868,12 +868,14 @@ class Game {
     }
 
     initAgents() {
-        for (let o of selectedOpponents) {
-            let id = o.match(/[^./]+$/)[0];
-            debug(id, `opponent ${o}`);
+        for (let id of selectedOpponents) {
+            debug(id, `opponent ${id}`);
             let opponent = new Opponent(this.opponents.length, id);
             this.opponents.push(opponent);
             this.agents.push(opponent);
+            if (id in fpsFromLocalFile) {
+                opponent.frameTime = 1 / fpsFromLocalFile[id];
+            }
             let lines = loadedFromLocalFile[id].split(/\r?\n|\r|\n/g);
             let start = "00:00:00.000"
             let action = "-"
