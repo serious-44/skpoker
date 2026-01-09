@@ -14,9 +14,10 @@ The game comes with timestamps for 100 opponents and a rudimentary tool for addi
 
 Check out https://f95zone.to/threads/virtual-strip-virtual-poker-games.4450 for tips on how to download and decode the videos.
 
-Try to download mp4 files, but you can also convert avi files with ffmpeg.
+Web browsers are very picky when it comes to video formats. AVI files don't work at all. With MP4 format, sound doesn't work. After converting them with ffmpeg using the default settings, they seem to work on every browser. (“-c:v copy” saves a lot of time).
 
-ffmpeg -i tori.avi -c:v copy tori.mp4
+ffmpeg -i downloads/tori.avi -c:v copy hd/tori.mp4
+ffmpeg -i downloads/tori.mp4 -c:v copy hd/tori.mp4
 
 Move your tori.mp4 file into the hd folder, next to tory.js.
 

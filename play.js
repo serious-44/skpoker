@@ -1,6 +1,6 @@
 "use strict";
 
-let cheatBetterCards = false;
+let cheatBetterCards = 1; // change to 3 or 4 to get even better cards
 let cheatOpponentsDontFold = false;
 
 let playIdleVideos = true;
@@ -362,7 +362,8 @@ class Opponent extends Agent {
             info1: document.getElementById(`opponent-${this.index+1}-info-1`),
             info2: document.getElementById(`opponent-${this.index+1}-info-2`),
             info3: document.getElementById(`opponent-${this.index+1}-info-3`),
-            info4: document.getElementById(`opponent-${this.index+1}-info-4`)
+            info4: document.getElementById(`opponent-${this.index+1}-info-4`),
+            panel: document.getElementById(`opponent-${this.index+1}-info`)
         }
         debug(this.id, `duration ${this.ui.video.duration} buffered ${this.ui.video.buffered}`);
         this.ui.card1.addEventListener("click", this.cardHandler);
@@ -460,15 +461,15 @@ class Opponent extends Agent {
                 debug(this.id, "show timer cancel");
             }
             this.currentClip = this.playingQueue.shift();
-            this.clipEndTime = this.currentClip.endTime - this.frameTime;
-            this.stepEndTime = this.currentClip.endTime - 2 * this.frameTime;
+            this.clipEndTime = this.currentClip.endTime - 2 * this.frameTime;
+            this.stepEndTime = this.currentClip.endTime - 3 * this.frameTime;
             this.playEndTime = this.currentClip.endTime - 10 * this.frameTime;
             //debug(this.id, `video start ${this.currentClip.action} ${this.currentClip.startTime.toFixed(3)} play:${this.playEndTime.toFixed(3)} step:${this.stepEndTime.toFixed(3)} last:${this.clipEndTime.toFixed(3)}`);
             this.playingVideo = true;
             this.playingSound = this.currentClip.quiet == "none";
             this.steppingVideo = false;
-            if (this.currentClip.startTime < this.playEndTime) {
-                this.ui.video.currentTime = this.currentClip.startTime;
+            this.ui.video.currentTime = this.currentClip.startTime + this.frameTime;
+            if (this.ui.video.currentTime < this.playEndTime) {
                 this.ui.video.play();
             } else {
                 this.startVideoStepping();
@@ -618,6 +619,7 @@ class Player extends Agent {
             bet4: document.getElementById(`player-bet4`),
             bet5: document.getElementById(`player-bet5`),
             info: document.getElementById(`player-info`),
+            panel: document.getElementById(`player`),
         }
         this.ui.card1.addEventListener("click", this.card1handler);
         this.ui.card2.addEventListener("click", this.card2handler);
@@ -640,30 +642,35 @@ class Player extends Agent {
         debug(this.id, "card1handler");
         this.hand[0].inapt = !this.hand[0].inapt;
         this.showCards();
+        this.disableButtons();
     }
 
     card2handler = () => {
         debug(this.id, "card2handler");
         this.hand[1].inapt = !this.hand[1].inapt;
         this.showCards();
+        this.disableButtons();
     }
 
     card3handler = () => {
         debug(this.id, "card3handler");
         this.hand[2].inapt = !this.hand[2].inapt;
         this.showCards();
+        this.disableButtons();
     }
 
     card4handler = () => {
         debug(this.id, "card4handler");
         this.hand[3].inapt = !this.hand[3].inapt;
         this.showCards();
+        this.disableButtons();
     }
 
     card5handler = () => {
         debug(this.id, "card5handler");
         this.hand[4].inapt = !this.hand[4].inapt;
         this.showCards();
+        this.disableButtons();
     }
 
     startHandler = () => {
@@ -782,14 +789,14 @@ class Player extends Agent {
         } else {
             this.ui.draw.disabled = this.money >= game.minWager ? video : true;
         }
+
+        game.hideGui(); //FIXME
     }
 
     deal() {
         this.state = State.BetFirst;
         [this.hand, this.evaluation] = game.deck.getCards();
-        if (cheatBetterCards) {
-            this.evaluation = game.deck.drawCards(this.hand);
-            this.evaluation = game.deck.drawCards(this.hand);
+        for (let i = cheatBetterCards; i > 0; i--) {
             this.evaluation = game.deck.drawCards(this.hand);
         }
         this.showCards();
@@ -845,6 +852,8 @@ class Game {
     waitExit = false;
     quitCounter = 0;
     delay = false;
+    uiHidden = false;
+    uiAutohide = false;
 
     opponents = [];
     player = null;
@@ -954,7 +963,9 @@ class Game {
         this.ui = {
             quit: document.getElementById("quit"),
             hide: document.getElementById("hide"),
+            autohide: document.getElementById("autohide"),
             drinkImg: document.getElementById("drink-img"),
+            pot: document.getElementById("pot"),
             potImg: document.getElementById("pot-img"),
             potMoney: document.getElementById("pot-money"),
             fullscreen: document.getElementById("fullscreen"),
@@ -965,6 +976,8 @@ class Game {
         this.ui.fullscreen.addEventListener("click", this.toggleFullscreen);
         this.ui.drinkImg.addEventListener("click", () => this.drink());
         this.ui.quit.addEventListener("click", () => this.quit());
+        this.ui.hide.addEventListener("click", () => this.toogleHide());
+        this.ui.autohide.addEventListener("click", () => this.toogleAutohide());
         this.ui.load.hidden = true;
         this.ui.start.hidden = false;
     }
@@ -1016,6 +1029,31 @@ class Game {
                 o.playVideo("bye", o.state >= State.Fold ? "none" : "cards");
             }
         }
+    }
+
+    hideGui() {
+        this.ui.hide.innerText = this.uiHidden ? "Show" : "Hide";
+        this.ui.autohide.style.backgroundColor = this.uiAutohide ? "#ffffff" : null; //FIXME add class
+        this.ui.autohide.style.outline = this.uiAutohide ? "2px solid white" : "";
+        let h1 = this.uiHidden;
+        let h2 = this.uiAutohide && (game.busy() || game.opponents.some((o) => o.busy()) || game.waitExit);
+
+        this.ui.pot.style.visibility = h1 || h2 ? "hidden" : "";
+        this.ui.fullscreen.style.visibility =  h1 || h2 ? "hidden" : "";
+        this.ui.hide.style.visibility =  h2 ? "hidden" : "";
+        this.ui.autohide.style.visibility =  h1 ? "hidden" : "";
+        this.player.ui.panel.style.visibility =  h1 || h2 ? "hidden" : "";
+        this.opponents.forEach((o) => o.ui.panel.style.visibility =  h1 || h2 ? "hidden" : "");
+    }
+
+    toogleHide() {
+        this.uiHidden = !this.uiHidden;
+        this.hideGui();
+    }
+
+    toogleAutohide() {
+        this.uiAutohide = !this.uiAutohide;
+        this.hideGui();
     }
 
     exit() {

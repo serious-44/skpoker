@@ -111,14 +111,14 @@ class Editor {
 
             setStart:       ["set-start",         null,               () => this.startPositionChanged(this.currentTime)],
             editorAdd:      ["editor-add"],
-            editorPrev:     ["editor-prev",       "ArrowUp",          () => this.editorMoveLine(-1, false, false)],
-            editorNext:     ["editor-next",       "ArrowDown",        () => this.editorMoveLine(1, false, false)],
+            editorPrev:     ["editor-prev",       "ArrowUp",          () => this.editorMoveLine(-1, true, true)],
+            editorNext:     ["editor-next",       "ArrowDown",        () => this.editorMoveLine(1, true, true)],
             //editorSync:   ["editor-sync"],
-            editorSetTime:  ["editor-set-time",   "Enter",            () => {this.editorMoveLine(0, true, false); this.editorMoveLine(1, false, true)}],
-            editorSetStart: ["editor-set-start",  "ArrowUp-shift",    () => this.editorMoveLine(0, true, false)],
-            editorSetEnd:   ["editor-set-end",    "ArrowDown-shift",  () => this.editorMoveLine(0, false, true)],
+            editorPlayTime: ["editor-play-time",  "Enter",            () => {this.editorMoveLine(0, true, true); this.editorMoveLine(1, false, false, true); this.editorMoveLine(-1, false, false); this.toggleVideoPlay()}],
+            //editorSetStart: ["editor-set-start",  "ArrowUp-shift",    () => this.editorMoveLine(0, true, false)],
+            //editorSetEnd:   ["editor-set-end",    "ArrowDown-shift",  () => this.editorMoveLine(0, false, true)],
 
-            save:           ["save",              null,               () => this.save()],
+            save:           ["save",              "KeyS-ctrl",        () => this.save()],
             back:           ["back",              null,               () => location.href = "index.html"],
         };
         this.ui = {};
@@ -135,12 +135,13 @@ class Editor {
 
         this.ui.pieces = [this.ui.pieces0, this.ui.pieces1, this.ui.pieces2, this.ui.pieces3, this.ui.pieces4];
 
-        this.ui.videoPosition.addEventListener("input", () => this.videoPositionChanged(this.frameTimestamp(this.ui.videoPosition.value)))
+        this.ui.videoPosition.addEventListener("input", () => this.videoPositionChanged(this.frameTimestamp(this.ui.videoPosition.value)));
         this.ui.mainVideo.addEventListener('timeupdate', () => this.videoPositionChanged(null, false));
 
-        this.ui.editor.addEventListener("selectionchange", () => this.updateEditorMark()) 
+        this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark();}); // FIXME: set vedeo time
+        // this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark(); this.editorMoveLine(0, true, true)}); delay until initialized
         this.ui.editor.addEventListener("scroll", () => this.ui.editorMark.scrollTop = this.ui.editor.scrollTop);
-        this.ui.editor.addEventListener("input", () => {this.dirty = true; this.checkButtons();});
+        this.ui.editor.addEventListener("input", () => {this.dirty = true; this.checkButtons();}); // FIMME: timestamp edited
 
         this.ui.videoInfo.width = this.ui.videoInfo.offsetWidth;
         const ctx = this.ui.videoInfo.getContext("2d");
@@ -194,6 +195,7 @@ class Editor {
         this.ui.videoPosition.value = 0;
 
         this.ui.startOverlay.style.display = "none";
+        //this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark(); this.editorMoveLine(0, true, true)});
         this.started = true;
     }
 
@@ -266,6 +268,7 @@ class Editor {
         }
         this.inVideoPositionChanged++;
         try {
+            //debug("video", `current ${this.ui.mainVideo.currentTime} end ${this.playTime}`);
             if (this.playTime !== null && this.ui.mainVideo.currentTime >= this.playTime) {
                 pauseVideo = true;
                 ts = this.targetTime;
@@ -397,16 +400,20 @@ class Editor {
         this.ui.editorMark.value = mark;
     }
 
-    editorMoveLine(add, setStart, setCurrent) {
+    editorMoveLine(add, setStart, setCurrent, setTarget = false) {
         let c = this.getLines();
         let row = c.row + add;
         row = Math.min(Math.max(row, 0), c.lines.length - 1)
         let tline = c.lines[row]
         this.setLines(row, 0, 0, c.lines, false);
-        if (setStart || setCurrent) {
+        if (setStart || setCurrent || setTarget) {
             let ts = this.scanTime(tline);
             if (setStart) this.startPositionChanged(ts);
             if (setCurrent) this.videoPositionChanged(ts);
+            if (setTarget) {
+                this.targetTime = ts;
+                this.playTime = this.addFrame(ts, -2);
+            }
         }
     }
 
