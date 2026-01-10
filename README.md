@@ -22,6 +22,18 @@ ffmpeg -i downloads/tori.mp4 -c:v copy hd/tori.mp4
 
 Move your tori.mp4 file into the hd folder, next to tory.js.
 
+## Music
+
+Skpoker comes with background music and one track for the striptease show. If you don't like the music, simply replace the mp3 files in the audio directory with your own mp3s.
+
+You can play different striptease music for each opponent. Place an mp3 with the opponent's number as the filename in the audio directory.
+
+e.g. audio/4168.mp3 for 4186-victoria.vs4, or audio/4001.mp3 for tori.vs4
+
+Using the Linux console, you can download all striptease tracks to your hard drive using wget.
+
+for i in $(seq 4002 4395) ; do wget https://us2.torquemada-games.com/pobieralniawww/online/$i/$i.mp3; done
+
 ## Cheating
 
 If you want to peek at your opponent's cards, just click on them.
@@ -32,7 +44,7 @@ Of course, in the source code you can further reduce the rudimentary AI of your 
 
 The preview images are loaded from the Internet. However, if available, index.html loads the images from your computer. Simply download all images into the preview directory.
 
-I used wget in a Linux terminal.
+With the Linux console, for example, you can download all previews at once.
 
 for i in $(seq 4001 4395) ; do wget https://strippokerhd.com/galeria/$i/rank.jpg -O $i.jpg ; done
 

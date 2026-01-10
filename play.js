@@ -1,7 +1,7 @@
 "use strict";
 
-let cheatBetterCards = 1; // change to 3 or 4 to get even better cards
-let cheatOpponentsDontFold = false;
+let cheatBetterCards = 3; // change to 3 or 4 to get even better cards
+let cheatOpponentsDontFold = true;
 
 let playIdleVideos = true;
 
@@ -337,10 +337,11 @@ class Opponent extends Agent {
     clipEndTime = null;
     showTimer = null;
 
-    constructor(index, id) {
+    constructor(index, id, nr) {
         super();
         this.index = index;
         this.id = id;
+        this.nr = nr;
         this.name = id.replace(/^[0-9-]*/, "").replace(/-.*$/, "");
         this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1);
         this.cardsHidden = true;
@@ -409,6 +410,10 @@ class Opponent extends Agent {
     }
 
     videoEnded() {
+        if (["on", "off", "broke"].includes(this.currentClip.action)) {
+            game.audio.removeStrip(this.nr);
+        }
+        let ap = ["off", "broke"].includes(this.currentClip.action)
         this.playingVideo = false; 
         this.playingSound = false; 
         this.steppingVideo = false;
@@ -416,6 +421,9 @@ class Opponent extends Agent {
         this.ui.video.currentTime = this.clipEndTime;
         if (this.state == State.Intro) {
             this.state = State.Deal;
+        }
+        if (ap && game.opponents.every((o) => !o.busy())) {
+            game.audio.playEffect("applause");
         }
         this.checkPlayingQueue();
     }
@@ -470,6 +478,9 @@ class Opponent extends Agent {
             this.steppingVideo = false;
             this.ui.video.currentTime = this.currentClip.startTime + this.frameTime;
             if (this.ui.video.currentTime < this.playEndTime) {
+                if (["on", "off", "broke"].includes(this.currentClip.action)) {
+                    game.audio.addStrip(this.nr);
+                }
                 this.ui.video.play();
             } else {
                 this.startVideoStepping();
@@ -517,7 +528,7 @@ class Opponent extends Agent {
             } else if (canFold && this.evaluation.hierarchy < Deck.hierarchy.Pair && rnd > 0.3) {
                 this.fold();
                 this.playVideo("drop");
-            } else if (this.money <= game.minWager + raise || (canFold && (rnd > 0.2 && rnd > this.evaluation.value / Deck.hierarchy.Straight || rnd > 0.95))) {
+            } else if (this.money <= game.minWager + raise || (canFold && ((rnd > 0.2 && rnd > this.evaluation.value / Deck.hierarchy.Straight) || rnd > 0.95))) {
                 debug(this.id, `call with ${rnd.toFixed(2)} ${this.evaluation.value}/${Deck.hierarchy.Straight}`)
                 this.call();
             } else {
@@ -699,18 +710,21 @@ class Player extends Agent {
 
     drawHandler = () => {
         debug(this.id, "drawHandler");
+        game.audio.playEffect("coins");
         this.draw();
         game.endRound();
     }
 
     callHandler = () => {
         debug(this.id, "callHandler");
+        game.audio.playEffect("coins");
         this.call();
         game.endRound();
     }
 
     bet1handler = () => {
         debug(this.id, "bet1handler");
+        game.audio.playEffect("coins");
         this.bet(0);
         this.state = State.Bet;
         game.endRound();
@@ -718,6 +732,7 @@ class Player extends Agent {
 
     bet2handler = () => {
         debug(this.id, "bet2handler");
+        game.audio.playEffect("coins");
         this.bet(10);
         this.state = State.Bet;
         game.endRound();
@@ -725,6 +740,7 @@ class Player extends Agent {
 
     bet3handler = () => {
         debug(this.id, "bet3handler");
+        game.audio.playEffect("coins");
         this.bet(20);
         this.state = State.Bet;
         game.endRound();
@@ -732,6 +748,7 @@ class Player extends Agent {
 
     bet4handler = () => {
         debug(this.id, "bet4handler");
+        game.audio.playEffect("coins");
         this.bet(50);
         this.state = State.Bet;
         game.endRound();
@@ -739,6 +756,7 @@ class Player extends Agent {
 
     bet5handler = () => {
         debug(this.id, "bet5handler");
+        game.audio.playEffect("coins");
         this.bet(100);
         this.state = State.Bet;
         game.endRound();
@@ -845,19 +863,113 @@ class Player extends Agent {
 
 }
 
+//**************************************************************************************************************************************** Audio
+class Audio {
+    effects = {
+        "shuffle": [...Array(3).keys()].map((i) => `audio/shuffle${i+1}.mp3`),
+        "coins": [...Array(10).keys()].map((i) => `audio/coins${i+1}.mp3`),
+        "applause": [...Array(8).keys()].map((i) => `audio/applause${i+1}.mp3`)
+    }
+    ambientMusic = [...Array(12).keys()].map((i) => `audio/ambient${i+1}.mp3`) ;
+
+    state = "ambient";
+    currentAmbient = 0;
+    activeStrip = new Set();
+    currentStrip = null;
+
+    constructor() {
+        this.music = document.getElementById("music");
+        this.effect = document.getElementById("effect");
+        this.music.onerror = () => this.ended(true); // no strip audio available
+        this.music.onended = () => this.ended();
+        this.music.onpause = () => this.ended();
+        this.currentAmbient = Math.floor(Math.random() * this.ambientMusic.length);
+        this.ended();
+    }
+
+    ended(error = false) {
+        if (this.activeStrip.size) {
+            let nr = Array.from(this.activeStrip);
+            nr = nr[Math.floor(Math.random() * nr.length)];
+            this.music.volume = 1;
+            this.music.src = error ? "audio/striptease.mp3" : `audio/${nr}.mp3`;
+            this.state = "strip";
+            this.currentStrip = nr;
+            debug("audio", `playing ${this.music.src}`)
+            this.music.play();
+        } else {
+            this.currentAmbient++;
+            if (this.currentAmbient >= this.ambientMusic.length) this.currentAmbient = 0;
+            this.music.src = this.ambientMusic[this.currentAmbient];
+            this.music.volume = 0.3;
+            this.currentStrip = null;
+            this.state = "ambient";
+            debug("audio", `playing ${this.music.src}`)
+            this.music.play();
+        }
+    }
+
+    addStrip(nr) {
+        this.activeStrip.add(nr);
+        if (this.state == "fadeout") {
+            this.music.volume = 1;
+            clearInterval(this.worker);
+            this.state = "stopped";
+            this.worker = null;
+            debug("audio", "cancle fadeout, continue strip");
+        } else if (this.state == "ambient") {
+            this.state = "stopped";
+            this.music.pause();
+            debug("audio", "stop ambient");
+        }
+    }
+
+    removeStrip(nr) {
+        this.activeStrip.delete(nr);
+        if (this.activeStrip.size == 0) {
+            this.state = "fadeout";
+            debug("audio", "start fadeout");
+            this.worker = setInterval(() => {
+                if (this.state == "fadeout") {
+                    let v = this.music.volume - 0.05;
+                    if (v <= 0) {
+                        clearInterval(this.worker);
+                        this.state = "stopped";
+                        this.worker = null;
+                        this.music.pause();
+                        debug("audio", "fadeout, stop strip");
+                    } else {
+                        this.music.volume = v;
+                        debug("audio", `fadeout, volume ${v}`);
+                    }
+                }
+            }, 100);
+        }
+    }
+
+    playEffect(effect) {
+        let e = this.effects[effect];
+        e = e[Math.floor(Math.random() * e.length)];
+        this.effect.src = e;
+        this.effect.play();
+    }
+}
+
 //**************************************************************************************************************************************** Game
 class Game {
     error = false;
+    loaded = false
     started = false;
     waitExit = false;
     quitCounter = 0;
     delay = false;
     uiHidden = false;
-    uiAutohide = false;
+    uiAutohide = true;
 
     opponents = [];
     player = null;
     agents = [];
+    audio = null;
 
     potMoney = 0;
     minWager = 10;
@@ -877,9 +989,11 @@ class Game {
     }
 
     initAgents() {
-        for (let id of selectedOpponents) {
-            debug(id, `opponent ${id}`);
-            let opponent = new Opponent(this.opponents.length, id);
+        for (let i = 0; i < selectedOpponents.length; i++) {
+            let id = selectedOpponents[i];
+            let nr = selectedPreviews[i];
+            debug(id, `opponent ${id} ${nr}`);
+            let opponent = new Opponent(this.opponents.length, id, nr);
             this.opponents.push(opponent);
             this.agents.push(opponent);
             if (id in fpsFromLocalFile) {
@@ -1013,8 +1127,12 @@ class Game {
         let rnd = Math.random();
         for (let o of this.opponents) {
             let [action, mod] = rnd > 0.7 ? ["no", o.state >= State.Fold ? "none" : "cards"] : ["show", "drink"];
-            debug("game", `${o.id} ${action} ${mod}`);
-            o.playVideo(action, mod);
+            if (o.playingQueue.some((c) => (c.mod == "drink" || c.action == "no"))) {
+                debug("game", `${o.id} drink already in queue`);
+            } else {
+                debug("game", `${o.id} ${action} ${mod}`);
+                o.playVideo(action, mod);
+            }
         }
     }
 
@@ -1079,9 +1197,12 @@ class Game {
             debug("game", "state Init, waiting");
             return;
         }
-        if (this.opponents.some(o => o.state == State.Intro)) {
+        if (!this.loaded && this.opponents.some(o => o.state == State.Intro)) {
             debug("game", "state Intro, waiting");
+            this.hideGui();
             this.ui.startOverlay.style.display = "none";
+            this.audio = new Audio();
+            this.loaded = true;
             return;
         }
         if (!this.started && this.opponents.every(o => o.state == State.Deal)) {
@@ -1127,6 +1248,7 @@ class Game {
     deal() {
         this.player.showInfo("deal");
         if (this.agents.reduce((total, o) => o.state == State.Broke ? total : total + 1, 0) > 1) {
+            this.audio.playEffect("shuffle");
             this.deck = new Deck();
             for (let o of this.opponents.filter((o) => o.state != State.Broke)) {
                 o.deal();
