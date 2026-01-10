@@ -4,7 +4,7 @@ Skpoker comes with background music and one track for the striptease show. If yo
 
 You can play different striptease music for each opponent. Place an mp3 with the opponent's number as the filename in the audio directory.
 
-e.g. audio/4168.mp3 for 4186-victoria.vs4
+e.g. audio/4168.mp3 for 4186-victoria.vs4, or audio/4001.mp3 for tori.vs4
 
 Using the Linux console, you can download all striptease tracks to your hard drive using wget.
 

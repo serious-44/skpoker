@@ -1,7 +1,7 @@
 "use strict";
 
-let cheatBetterCards = 3; // change to 3 or 4 to get even better cards
-let cheatOpponentsDontFold = true;
+let cheatBetterCards = 1; // change to 3 or 4 to get even better cards
+let cheatOpponentsDontFold = false;
 
 let playIdleVideos = true;
 
