@@ -874,10 +874,13 @@ class Audio {
 
     state = "ambient";
     currentAmbient = 0;
+    dimAmbientVolume = true;
     activeStrip = new Set();
     currentStrip = null;
+    dimmedVolume = 0.4;
 
-    constructor() {
+    constructor(dim) {
+        this.dimAmbientVolume = dim;
         this.music = document.getElementById("music");
         this.effect = document.getElementById("effect");
         this.music.onerror = () => this.ended(true); // no strip audio available
@@ -885,6 +888,44 @@ class Audio {
         this.music.onpause = () => this.ended();
         this.currentAmbient = Math.floor(Math.random() * this.ambientMusic.length);
         this.ended();
+    }
+
+    dimAmbient(dim = this.dimAmbientVolume) {
+        if (this.dimAmbientVolume != dim) {
+            debug("audio", `dim volume ${this.dimAmbientVolume} => ${dim}`);
+            this.dimAmbientVolume = dim;
+            if (this.state == "ambient" && !this.ambientworker) {
+                let target = this.dimAmbientVolume ? this.dimmedVolume : 1;
+                this.ambientworker = setInterval(() => {
+                    if (this.state == "ambient" && this.dimAmbientVolume) {
+                        let v = this.music.volume - 0.01;
+                        if (v <= this.dimmedVolume) {
+                            this.music.volume = this.dimmedVolume;
+                            clearInterval(this.ambientworker);
+                            this.ambientworker = null;
+                            debug("audio", "dim volume done");
+                        } else {
+                            this.music.volume = v;
+                            debug("audio", `dim volume ${v}`);
+                        }
+                    } else if (this.state == "ambient" && !this.dimAmbientVolume) {
+                        let v = this.music.volume + 0.01;
+                        if (v >= 1) {
+                            this.music.volume = 1;
+                            clearInterval(this.ambientworker);
+                            this.ambientworker = null;
+                            debug("audio", "dim volume done");
+                        } else {
+                            this.music.volume = v;
+                            debug("audio", `dim volume ${v}`);
+                        }
+                    } else {
+                        clearInterval(this.ambientworker);
+                        this.ambientworker = null;
+                    }
+                }, 200);
+            }
+        }
     }
 
     ended(error = false) {
@@ -901,7 +942,7 @@ class Audio {
             this.currentAmbient++;
             if (this.currentAmbient >= this.ambientMusic.length) this.currentAmbient = 0;
             this.music.src = this.ambientMusic[this.currentAmbient];
-            this.music.volume = 0.3;
+            this.music.volume = this.dimAmbientVolume ? this.dimmedVolume : 1;
             this.currentStrip = null;
             this.state = "ambient";
             debug("audio", `playing ${this.music.src}`)
@@ -1201,7 +1242,7 @@ class Game {
             debug("game", "state Intro, waiting");
             this.hideGui();
             this.ui.startOverlay.style.display = "none";
-            this.audio = new Audio();
+            this.audio = new Audio(false);
             this.loaded = true;
             return;
         }
@@ -1209,6 +1250,7 @@ class Game {
             debug("game", "state Deal, dealing");
             this.ui.drinkImg.hidden = false;
             this.started = true;
+            this.audio.dimAmbient(true);
             this.deal();
             return;
         }
@@ -1256,6 +1298,7 @@ class Game {
             this.player.deal();
             this.startRound();
         } else {
+            this.audio.dimAmbient(false);
             this.player.completed(() => this.exit());
         }
     }
