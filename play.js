@@ -397,6 +397,7 @@ class Opponent extends Agent {
         //debug(this.id, `video start step current:${this.ui.video.currentTime.toFixed(3)} goal:${this.stepEndTime.toFixed(3)}`);
         let videoStepper = setInterval(() => {
             if (!this.steppingVideo) { // Apparently, there are still several events waiting in the queue.
+                clearInterval(videoStepper);
             } else if (this.ui.video.currentTime < this.stepEndTime) {
                 //debug(this.id, `video step ${this.ui.video.currentTime} ${this.stepEndTime} ${steps}`);
                 this.ui.video.currentTime += this.frameTime;
@@ -434,6 +435,15 @@ class Opponent extends Agent {
     }
 
     playVideo(action, mod = "any", zoom = game.zoom ? "zoom" : "none", quiet = game.opponents.some((o) => o != this && o.playingSound) ? "quiet" : "any", section = this.clothes) {
+        if ((this.playingVideo || this.playingQueue.length > 0) && (action == "take" || action == "bye" || action == "no" || mod == "drink")) {
+            debug(this.id, "cancel videos");
+            this.playingQueue = [];
+            if (this.playingVideo) {
+                this.ui.video.pause();
+                this.videoEnded();
+            }
+        }
+
         let variants = [`${action}-any-any-any`, `${action}-any-any-${quiet}`, 
                         `${action}-any-${zoom}-any`, `${action}-any-${zoom}-${quiet}`,
                         `${action}-${mod}-any-any`, `${action}-${mod}-any-${quiet}`, 
@@ -454,6 +464,8 @@ class Opponent extends Agent {
             this.checkPlayingQueue();
         } else if (action == "no") {
             this.playVideo("show", "drink", zoom, quiet, section);
+        } else if (action == "bye") {
+            this.playVideo("show", "drink", zoom, quiet, section);
         } else if (section < 4 && action != "on" && action != "off") {
             this.playVideo(action, mod, zoom, quiet, section + 1);
         } else {
@@ -468,22 +480,29 @@ class Opponent extends Agent {
                 this.showTimer = null;
                 debug(this.id, "show timer cancel");
             }
-            this.currentClip = this.playingQueue.shift();
-            this.clipEndTime = this.currentClip.endTime - 2 * this.frameTime;
-            this.stepEndTime = this.currentClip.endTime - 3 * this.frameTime;
-            this.playEndTime = this.currentClip.endTime - 10 * this.frameTime;
-            //debug(this.id, `video start ${this.currentClip.action} ${this.currentClip.startTime.toFixed(3)} play:${this.playEndTime.toFixed(3)} step:${this.stepEndTime.toFixed(3)} last:${this.clipEndTime.toFixed(3)}`);
-            this.playingVideo = true;
-            this.playingSound = this.currentClip.quiet == "none";
-            this.steppingVideo = false;
-            this.ui.video.currentTime = this.currentClip.startTime + this.frameTime;
-            if (this.ui.video.currentTime < this.playEndTime) {
-                if (["on", "off", "broke"].includes(this.currentClip.action)) {
-                    game.audio.addStrip(this.nr);
+            let clip = this.playingQueue.shift();
+            if (this.ui.video.buffered.length) {
+                this.currentClip = clip;
+                this.clipEndTime = this.currentClip.endTime - 2 * this.frameTime;
+                this.stepEndTime = this.currentClip.endTime - 3 * this.frameTime;
+                this.playEndTime = this.currentClip.endTime - 10 * this.frameTime;
+                //debug(this.id, `video start ${this.currentClip.action} ${this.currentClip.startTime.toFixed(3)} play:${this.playEndTime.toFixed(3)} step:${this.stepEndTime.toFixed(3)} last:${this.clipEndTime.toFixed(3)}`);
+                this.playingVideo = true;
+                this.playingSound = this.currentClip.quiet == "none";
+                this.steppingVideo = false;
+                this.ui.video.currentTime = this.currentClip.startTime + this.frameTime;
+                if (this.ui.video.currentTime < this.playEndTime) {
+                    if (["on", "off", "broke"].includes(this.currentClip.action)) {
+                        game.audio.addStrip(this.nr);
+                    }
+                    this.ui.video.play();
+                } else {
+                    this.startVideoStepping();
                 }
-                this.ui.video.play();
             } else {
-                this.startVideoStepping();
+                if (this.state == State.Intro) {
+                    this.state = State.Deal;
+                }
             }
         } else if (playIdleVideos) {
             this.showTimer = setTimeout(() => {
@@ -528,7 +547,7 @@ class Opponent extends Agent {
             } else if (canFold && this.evaluation.hierarchy < Deck.hierarchy.Pair && rnd > 0.3) {
                 this.fold();
                 this.playVideo("drop");
-            } else if (this.money <= game.minWager + raise || (canFold && ((rnd > 0.2 && rnd > this.evaluation.value / Deck.hierarchy.Straight) || rnd > 0.95))) {
+            } else if (canFold && (this.money <= game.minWager + raise || ((rnd > 0.2 && rnd > this.evaluation.value / Deck.hierarchy.Straight) || rnd > 0.95))) {
                 debug(this.id, `call with ${rnd.toFixed(2)} ${this.evaluation.value}/${Deck.hierarchy.Straight}`)
                 this.call();
             } else {
@@ -600,6 +619,7 @@ class Player extends Agent {
 
     id = "player";
     confirmCallback = null;
+    active = false;
 
     constructor() {
         super();
@@ -702,64 +722,88 @@ class Player extends Agent {
     }
 
     foldHandler = () => {
-        debug(this.id, "foldHandler");
-        this.showInfo("fold");
-        this.state = State.Fold;
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "foldHandler");
+            this.showInfo("fold");
+            this.state = State.Fold;
+            game.endRound();
+        }
     }
 
     drawHandler = () => {
-        debug(this.id, "drawHandler");
-        game.audio.playEffect("coins");
-        this.draw();
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "drawHandler");
+            game.audio.playEffect("coins");
+            this.draw();
+            game.endRound();
+        }
     }
 
     callHandler = () => {
-        debug(this.id, "callHandler");
-        game.audio.playEffect("coins");
-        this.call();
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "callHandler");
+            game.audio.playEffect("coins");
+            this.call();
+            game.endRound();
+        }
     }
 
     bet1handler = () => {
-        debug(this.id, "bet1handler");
-        game.audio.playEffect("coins");
-        this.bet(0);
-        this.state = State.Bet;
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "bet1handler");
+            game.audio.playEffect("coins");
+            this.bet(0);
+            this.state = State.Bet;
+            game.endRound();
+        }
     }
 
     bet2handler = () => {
-        debug(this.id, "bet2handler");
-        game.audio.playEffect("coins");
-        this.bet(10);
-        this.state = State.Bet;
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "bet2handler");
+            game.audio.playEffect("coins");
+            this.bet(10);
+            this.state = State.Bet;
+            game.endRound();
+        }
     }
 
     bet3handler = () => {
-        debug(this.id, "bet3handler");
-        game.audio.playEffect("coins");
-        this.bet(20);
-        this.state = State.Bet;
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "bet3handler");
+            game.audio.playEffect("coins");
+            this.bet(20);
+            this.state = State.Bet;
+            game.endRound();
+        }
     }
 
     bet4handler = () => {
-        debug(this.id, "bet4handler");
-        game.audio.playEffect("coins");
-        this.bet(50);
-        this.state = State.Bet;
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "bet4handler");
+            game.audio.playEffect("coins");
+            this.bet(50);
+            this.state = State.Bet;
+            game.endRound();
+        }
     }
 
     bet5handler = () => {
-        debug(this.id, "bet5handler");
-        game.audio.playEffect("coins");
-        this.bet(100);
-        this.state = State.Bet;
-        game.endRound();
+        if (this.active) {
+            this.active = false;
+            debug(this.id, "bet5handler");
+            game.audio.playEffect("coins");
+            this.bet(100);
+            this.state = State.Bet;
+            game.endRound();
+        }
     }
 
     disableButtons() {
@@ -821,6 +865,7 @@ class Player extends Agent {
     }
 
     activate() {
+        this.active = true;
         this.disableButtons();
     }
 
@@ -1178,7 +1223,9 @@ class Game {
     }
 
     quit() {
-        if (!this.started || this.quitCounter > 0) {
+        if (!this.started) {
+            location.href = "index.html";
+        } else if (this.quitCounter > 0) {
             this.waitExit = true;
             this.stateChanged();
         } else {
@@ -1224,6 +1271,10 @@ class Game {
     }
 
     start() {
+        this.hideGui();
+        this.ui.startOverlay.style.display = "none";
+        this.audio = new Audio(false);
+        this.loaded = true;
         for (let o of this.opponents) {
             o.playIntro();
         }
@@ -1240,10 +1291,6 @@ class Game {
         }
         if (!this.loaded && this.opponents.some(o => o.state == State.Intro)) {
             debug("game", "state Intro, waiting");
-            this.hideGui();
-            this.ui.startOverlay.style.display = "none";
-            this.audio = new Audio(false);
-            this.loaded = true;
             return;
         }
         if (!this.started && this.opponents.every(o => o.state == State.Deal)) {

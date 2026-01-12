@@ -8,13 +8,15 @@ In each round, a player receives 5 cards and can call, fold or bet until one pla
 
 Skpoker is a webapp that runs entirely in your browser and does not require a web server. Simply download it and open index.html in your browser. Of course, you can also copy the game to your private web server.
 
-For each opponent, you need a video and a file with the timestamps of the individual clips.
+For each opponent, you need a video and a file with the scene descriptions of the individual clips.
 
-The game comes with timestamps for 100 opponents and a rudimentary tool for additional opponents. You can see the list of the included opponents in the hd directory. And as soon as you open index.html.
+The game comes with scene descriptions for 100 opponents and a rudimentary tool for additional opponents. You can see the list of the included opponents in the hd directory. And as soon as you open index.html.
 
 Check out https://f95zone.to/threads/virtual-strip-virtual-poker-games.4450 for tips on how to download and decode the videos.
 
-Web browsers are very picky when it comes to video formats. AVI files don't work at all. With MP4 format, sound doesn't work. After converting them with ffmpeg using the default settings, they seem to work on every browser. (“-c:v copy” saves a lot of time).
+Web browsers are very picky when it comes to video formats. AVI files don't work at all. With MP4 format, on some browsers sound doesn't work. 
+
+First, try downloading a vs4 file, which will result in an mp4 file. If the mp4 does not work, or if you get an avi file - after converting them with ffmpeg using the default settings, they seem to work on every browser. (“-c:v copy” saves a lot of time).
 
 ffmpeg -i downloads/tori.avi -c:v copy hd/tori.mp4
 
@@ -30,9 +32,9 @@ You can play different striptease music for each opponent. Place an mp3 with the
 
 e.g. audio/4168.mp3 for 4186-victoria.vs4, or audio/4001.mp3 for tori.vs4
 
-Using the Linux console, you can download all striptease tracks to your hard drive using wget.
+Using the Linux console, you can download all striptease tracks to your hard drive with wget.
 
-for i in $(seq 4002 4395) ; do wget https://us2.torquemada-games.com/pobieralniawww/online/$i/$i.mp3; done
+for i in $(seq 4002 4396) ; do wget https://us2.torquemada-games.com/pobieralniawww/online/$i/$i.mp3; done
 
 ## Cheating
 
@@ -42,15 +44,17 @@ Of course, in the source code you can further reduce the rudimentary AI of your 
 
 ## Preview images
 
-The preview images are loaded from the Internet. However, if available, index.html loads the images from your computer. Simply download all images into the preview directory.
+The preview images are loaded from the Internet. But if you don't want to wait every time, index.html can also load the images from your computer. Simply download all images into the preview directory.
 
 With the Linux console, for example, you can download all previews at once.
 
-for i in $(seq 4001 4395) ; do wget https://strippokerhd.com/galeria/$i/rank.jpg -O $i.jpg ; done
+for i in $(seq 4001 4396) ; do wget https://strippokerhd.com/galeria/$i/rank.jpg -O $i.jpg ; done
 
 ## Smartphones
 
 Skpoker is supposed to run on any modern web browser, including smartphones. However, on phones, the browser is not allowed to launch webapps from its own file system. But it works with a private web server.
+
+If you're running your web server on your Android phone, the free Simple HTTP Server is more than sufficient.
 
 I've been told, there are tools to turn html pages into apps. If you figure out how to do that, please let us know.
 

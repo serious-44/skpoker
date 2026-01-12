@@ -59,6 +59,8 @@ class Editor {
             pieces1:        ["pieces1",         "Digit1", () => this.insertTimestampText(null, null, 1)],
             pieces0:        ["pieces0",         "Digit0", () => this.insertTimestampText(null, null, 0)],
             zoom:           ["zoom",            "Digit5", () => this.insertTimestampText(null, null, this.currentPieces, !this.currentZoom)],
+            update:         ["update",          "KeyU",   () => this.updateTimestamp()],
+            delete:         ["delete",          "KeyO",   () => this.deleteTimestamp()],
             intro:          ["intro",           "KeyI",   () => this.insertTimestampText("intro", null, 4, "ignore")],
             take:           ["take",            "KeyT",   () => this.insertTimestampText("take")],
             takeGood:       ["take-good",       "KeyG",   () => this.insertTimestampText("take", "good")],
@@ -114,7 +116,7 @@ class Editor {
             editorPrev:     ["editor-prev",       "ArrowUp",          () => this.editorMoveLine(-1, true, true)],
             editorNext:     ["editor-next",       "ArrowDown",        () => this.editorMoveLine(1, true, true)],
             //editorSync:   ["editor-sync"],
-            editorPlayTime: ["editor-play-time",  "Enter",            () => {this.editorMoveLine(0, true, true); this.editorMoveLine(1, false, false, true); this.editorMoveLine(-1, false, false); this.toggleVideoPlay()}],
+            editorPlayTime: ["editor-play-time",  "Enter",            () => this.playClip()],
             //editorSetStart: ["editor-set-start",  "ArrowUp-shift",    () => this.editorMoveLine(0, true, false)],
             //editorSetEnd:   ["editor-set-end",    "ArrowDown-shift",  () => this.editorMoveLine(0, false, true)],
 
@@ -138,7 +140,7 @@ class Editor {
         this.ui.videoPosition.addEventListener("input", () => this.videoPositionChanged(this.frameTimestamp(this.ui.videoPosition.value)));
         this.ui.mainVideo.addEventListener('timeupdate', () => this.videoPositionChanged(null, false));
 
-        this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark();}); // FIXME: set vedeo time
+        //this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark();}); // FIXME: set vedeo time
         // this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark(); this.editorMoveLine(0, true, true)}); delay until initialized
         this.ui.editor.addEventListener("scroll", () => this.ui.editorMark.scrollTop = this.ui.editor.scrollTop);
         this.ui.editor.addEventListener("input", () => {this.dirty = true; this.checkButtons();}); // FIMME: timestamp edited
@@ -195,7 +197,7 @@ class Editor {
         this.ui.videoPosition.value = 0;
 
         this.ui.startOverlay.style.display = "none";
-        //this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark(); this.editorMoveLine(0, true, true)});
+        this.ui.editor.addEventListener("selectionchange", () => {this.updateEditorMark(); this.editorMoveLine(0, true, true)});
         this.started = true;
     }
 
@@ -405,7 +407,9 @@ class Editor {
         let row = c.row + add;
         row = Math.min(Math.max(row, 0), c.lines.length - 1)
         let tline = c.lines[row]
-        this.setLines(row, 0, 0, c.lines, false);
+        if (add) {
+            this.setLines(row, 0, 0, c.lines, false);
+        }
         if (setStart || setCurrent || setTarget) {
             let ts = this.scanTime(tline);
             if (setStart) this.startPositionChanged(ts);
@@ -448,6 +452,35 @@ class Editor {
             this.currentZoom = zoom;
             this.ui.zoom.checked = zoom;
         }
+    }
+
+    updateTimestamp() {
+        let c = this.getLines();
+        let l1 = `${editor.formatTime(editor.currentTime)}${c.lines[c.row].replace(/^[0-9:]*/, "")}` 
+        c.lines[c.row] = l1;
+        this.setLines(c.row, 0, 12, c.lines);
+    }
+
+    deleteTimestamp() {
+        let c = this.getLines();
+        c.lines.splice(c.row, 1);
+        c.row = Math.min(c.row, c.lines.length - 1)
+        this.setLines(c.row, 0, 12, c.lines);
+    }
+
+    playClip() {
+        let c = this.getLines();
+        let endrow = c.row + 1;
+        endrow = Math.min(endrow, c.lines.length - 1)
+        let startline = c.lines[c.row]
+        let endline = c.lines[endrow]
+        let startts = this.scanTime(startline);
+        let endts = this.scanTime(endline);
+        this.startPositionChanged(startts);
+        this.videoPositionChanged(startts);
+        this.targetTime = endts;
+        this.playTime = this.addFrame(endts, -2);
+        this.toggleVideoPlay()
     }
 
     async save() {

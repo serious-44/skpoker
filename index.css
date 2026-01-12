@@ -66,6 +66,10 @@
     margin: 0;
 }
 
+#opponents div {
+    background-color: transparent;
+}
+
 #opponents div .opponent-name {
     position: absolute;
     top: 20px;
@@ -139,4 +143,9 @@
 #opponents div .opponent-table:hover .opponent-links, #opponents div .opponent-table:hover a {
     margin: 0;
     color: black;
+}
+
+.preview-video {
+    object-fit: cover;
+    margin: 5px;
 }
