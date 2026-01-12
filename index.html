@@ -575,6 +575,10 @@
                 for (let o of g.reverse()) {
                     previewOfId[o.id] = o.preview;
                     col++;
+                    if (col > 5) {
+                        row++;
+                        col = 1;
+                    }
                     document.write(`
                         <div class="opponent-unselected" id="opponent-${o.id}" title="${o.id.replace(/^[^/]*[/]/, "") + ".vs4"}" style="grid-column: ${col}; grid-row: ${row};" onmouseenter="showvideo('${o.id}', '${o.preview}')"  onmouseleave="hidevideo('${o.id}', '${o.preview}')">
                             <img class="opponent-image" id="img-${o.preview}" onclick="toggle('${o.id}', '${o.preview}')" src="preview/${o.preview}.jpg" onerror="loadExternalPreview(${o.preview})">
