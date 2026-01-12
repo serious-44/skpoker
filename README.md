@@ -6,7 +6,11 @@ In each round, a player receives 5 cards and can call, fold or bet until one pla
 
 ## Installing the program
 
-Skpoker is a webapp that runs entirely in your browser and does not require a web server. Simply download it and open index.html in your browser. Of course, you can also copy the game to your private web server.
+**1 Download and unpack files from github as a zip, or clone this project.**
+
+Skpoker is a webapp that runs entirely in your browser and does not require a web server. You don't need any releases, packages, or additional software. Simply download it.
+
+**2 Copy your mp4 videos to hd directory.**
 
 For each opponent, you need a video and a file with the scene descriptions of the individual clips.
 
@@ -18,11 +22,17 @@ Web browsers are very picky when it comes to video formats. AVI files don't work
 
 First, try downloading a vs4 file, which will result in an mp4 file. If the mp4 does not work, or if you get an avi file - after converting them with ffmpeg using the default settings, they seem to work on every browser. (“-c:v copy” saves a lot of time).
 
-ffmpeg -i downloads/tori.avi -c:v copy hd/tori.mp4
-
+ffmpeg -i downloads/tori.avi -c:v copy hd/tori.mp4<br>
 ffmpeg -i downloads/tori.mp4 -c:v copy hd/tori.mp4
 
 Move your tori.mp4 file into the hd folder, next to tory.js.
+
+**3 Open index.html in your browser**
+
+Drag index.html into your browser's address bar.
+
+Of course, you can also copy the game to your private web server. And type in the URL of your server. E.g., http://myserver/skpoker-main/index.html, or however you name your server and directories.
+
 
 ## Music
 
@@ -56,7 +66,7 @@ Skpoker is supposed to run on any modern web browser, including smartphones. How
 
 If you're running your web server on your Android phone, the free Simple HTTP Server is more than sufficient.
 
-I've been told, there are tools to turn html pages into apps. If you figure out how to do that, please let us know.
+I've been told, there are tools to turn html pages into apps. If you figure out how to do that, please let me know.
 
 ## Timestamp Editor
 
