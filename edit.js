@@ -74,7 +74,7 @@ class Editor {
             show:           ["show",            "KeyS",   () => this.insertTimestampText("show")],
             showCards:      ["show-cards",      "KeyC",   () => this.insertTimestampText("show", "cards")],
             showCardsLow:   ["show-cards-low",  "KeyE",   () => this.insertTimestampText("show", "low")],
-            showCardsHigh:  ["show-cards-high", "KeyH",   () => this.insertTimestampText("show", "high")],
+            //showCardsHigh:  ["show-cards-high", "KeyH",   () => this.insertTimestampText("show", "high")],
             showDrink:      ["show-drink",      "KeyK",   () => this.insertTimestampText("show", "drink")],
             showNo:         ["show-no",         "KeyN",   () => this.insertTimestampText("no")],
             showCardsNo:    ["show-cards-no",   "KeyJ",   () => this.insertTimestampText("no", "cards")],

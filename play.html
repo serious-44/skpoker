@@ -34,12 +34,12 @@
     const loadedFromLocalFile = {}; //Internetbrowsers are not allowed to read local text files, but can load scrips from local files.  
     const fpsFromLocalFile = {};
 
-    function opponentHtml(pos, style) {
+    function opponentHtml(pos, style, click) {
         return `
             <script src='hd/${selectedOpponents[pos]}.js'><${"/"}script>
             <div class="opponent" id="opponent-${pos+1}">
-                <div class="opponent-videoframe" id="opponent-${pos+1}-videoframe">
-                    <video class="opponent-video-${style}" id="opponent-${pos+1}-video" width="100%" height="100%" prefetch>
+                <div class="opponent-videoframe" id="opponent-${pos+1}-videoframe" onclick="${click}">
+                    <video class="opponent-video-${style}" id="opponent-${pos+1}-video" width="100%" height="100%" preload="auto" hidden>
                         <source src="hd/${selectedOpponents[pos]}.mp4" type="video/mp4">
                     </video>
                 </div>
@@ -64,59 +64,59 @@
         document.write(opponentHtml(0, 1));
     } else if (selectedOpponents.length == 2) {
         document.write(`
-            <div class="horizontal-splitter">
+            <div id="splitter2" class="horizontal-splitter">
                 <div class="splitter-content">
-                    ${opponentHtml(0, 2)}
+                    ${opponentHtml(0, 2, "toggleSplitter(this, 0, 'splitter2')")}
                 </div>
                 <div class="horizontal-splitbar"></div>
                 <div class="splitter-content">
-                    ${opponentHtml(1, 2)}
+                    ${opponentHtml(1, 2, "toggleSplitter(this, 1, 'splitter2')")}
                 </div>
             </div>
         `);
     } else if (selectedOpponents.length == 3) {
         document.write(`
-            <div class="horizontal-splitter">
+            <div id="splitter3" class="horizontal-splitter">
                 <div class="splitter-content">
-                    <div class="vertical-splitter">
+                    <div id="splitter3a" class="vertical-splitter">
                         <div class="splitter-content">
-                            ${opponentHtml(0, 4)}
+                            ${opponentHtml(0, 4, "toggleSplitter(this, 0, 'splitter3', 0, 'splitter3a')")}
                         </div>
                         <div class="vertical-splitbar"></div>
                         <div class="splitter-content">
-                            ${opponentHtml(1, 4)}
+                            ${opponentHtml(1, 4, "toggleSplitter(this, 0, 'splitter3', 1, 'splitter3a')")}
                         </div>
                     </div>
                 </div>
                 <div class="horizontal-splitbar"></div>
                 <div class="splitter-content">
-                    ${opponentHtml(2, 4)}
+                    ${opponentHtml(2, 4, "toggleSplitter(this, 1, 'splitter3')")}
                 </div>
             </div>
         `);
     } else {
         document.write(`
-            <div class="horizontal-splitter">
+            <div id="splitter4" class="horizontal-splitter">
                 <div class="splitter-content">
-                    <div class="vertical-splitter">
+                    <div id="splitter4a" class="vertical-splitter">
                         <div class="splitter-content">
-                            ${opponentHtml(0, 4)}
+                            ${opponentHtml(0, 4, "toggleSplitter(this, 0, 'splitter4', 0, 'splitter4a')")}
                         </div>
                         <div class="vertical-splitbar"></div>
                         <div class="splitter-content">
-                            ${opponentHtml(1, 4)}
+                            ${opponentHtml(1, 4, "toggleSplitter(this, 0, 'splitter4', 1, 'splitter4a')")}
                         </div>
                     </div>
                 </div>
                 <div class="horizontal-splitbar"></div>
                 <div class="splitter-content">
-                    <div class="vertical-splitter">
+                    <div id="splitter4b" class="vertical-splitter">
                         <div class="splitter-content">
-                            ${opponentHtml(2, 4)}
+                            ${opponentHtml(2, 4, "toggleSplitter(this, 1, 'splitter4', 0, 'splitter4b')")}
                         </div>
                         <div class="vertical-splitbar"></div>
                         <div class="splitter-content">
-                            ${opponentHtml(3, 4)}
+                            ${opponentHtml(3, 4, "toggleSplitter(this, 1, 'splitter4', 1, 'splitter4b')")}
                         </div>
                     </div>
                 </div>

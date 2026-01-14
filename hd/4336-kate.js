@@ -80,17 +80,17 @@ loadedFromLocalFile["4336-kate"] = `
 00:07:46:900 show  4 strip   zoom quiet
 00:08:11:091 show  4 strip   zoom quiet
 00:08:37:951 take  3         zoom      
-00:08:42:122 take  4 good    zoom      
-00:08:46:460 take  4 good    zoom      
-00:08:50:631 take  4 bad     zoom      
-00:08:55:402 drop  4         zoom quiet
-00:08:58:906 drop  4         zoom quiet
-00:09:03:310 drop  4         zoom quiet
+00:08:42:122 take  3 good    zoom      
+00:08:46:460 take  3 good    zoom      
+00:08:50:631 take  3 bad     zoom      
+00:08:55:402 drop  3         zoom quiet
+00:08:58:906 drop  3         zoom quiet
+00:09:03:310 drop  3         zoom quiet
 00:09:07:814 win   3         zoom      
-00:09:11:418 win   4 youlose zoom      
+00:09:11:418 win   3 youlose zoom      
 00:09:15:055 win   3         zoom      
 00:09:19:193 lose  3         zoom      
-00:09:23:163 lose  4 youwin  zoom      
+00:09:23:163 lose  3 youwin  zoom      
 00:09:26:700 show  3         zoom quiet
 00:09:32:072 show  3 drink   zoom      
 00:09:38:011 no    3         zoom      

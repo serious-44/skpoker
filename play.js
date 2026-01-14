@@ -411,6 +411,7 @@ class Opponent extends Agent {
     }
 
     videoEnded() {
+        debug(this.id, `video ended ${this.currentClip.action} ${this.currentClip.section}`);
         if (["on", "off", "broke"].includes(this.currentClip.action)) {
             game.audio.removeStrip(this.nr);
         }
@@ -430,6 +431,7 @@ class Opponent extends Agent {
     }
 
     playIntro() {
+        this.ui.video.hidden = false;
         this.state = State.Intro; //FIXME
         this.playVideo("intro");
     }
@@ -542,7 +544,7 @@ class Opponent extends Agent {
                 this.draw();
                 let mod = "none";
                 if (this.evaluation.hierarchy < Deck.hierarchy.Pair) mod = "bad";
-                if (this.evaluation.hierarchy >= Deck.hierarchy.Three) mod = "good";
+                if (this.evaluation.hierarchy >= Deck.hierarchy.TwoPairs) mod = "good";
                 this.playVideo("take", mod);
             } else if (canFold && this.evaluation.hierarchy < Deck.hierarchy.Pair && rnd > 0.3) {
                 this.fold();
@@ -1477,6 +1479,44 @@ class Resizable {
         }
 
         this.bar.addEventListener("pointerdown", this.start);
+    }
+
+    static currentFullsizeContent = null;
+    static currentFullsizeGrid1 = null;
+    static currentFullsizeGrid2 = null;
+}
+
+function toggleSplitter(content, part1, resize1, part2 = null, resize2 = null) {
+    //resize1 horizontal, if exists resize2 vertical
+    debug("toggle Resizer", `${content}, ${part1}, ${resize1}, ${part2}, ${resize2}`)
+    if (Resizable.currentFullsizeContent) {
+        let s = document.getElementById(resize1);
+        s.children[1].style.display = "";
+        s.children[part1 == 0 ? 2 : 0].style.display = "";
+        s.style["grid-template-columns"] = Resizable.currentFullsizeGrid1;
+        if (resize2) {
+            s = document.getElementById(resize2);
+            s.children[1].style.display = "";
+            s.children[part2 == 0 ? 2 : 0].style.display = "";
+            s.style["grid-template-rows"] = Resizable.currentFullsizeGrid2;
+        }
+        content.style.cursor = "";
+        Resizable.currentFullsizeContent = null;
+    } else {
+        let s = document.getElementById(resize1);
+        Resizable.currentFullsizeGrid1 = s.style["grid-template-columns"];
+        s.children[1].style.display = "none";
+        s.children[part1 == 0 ? 2 : 0].style.display = "none";
+        s.style["grid-template-columns"] = "100%";
+        if (resize2) {
+            s = document.getElementById(resize2);
+            Resizable.currentFullsizeGrid2 = s.style["grid-template-rows"];
+            s.children[1].style.display = "none";
+            s.children[part2 == 0 ? 2 : 0].style.display = "none";
+            s.style["grid-template-rows"] = "100%";
+        }
+        content.style.cursor = "zoom-out";
+        Resizable.currentFullsizeContent = content;
     }
 }
 
