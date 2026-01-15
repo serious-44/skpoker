@@ -1500,7 +1500,7 @@ function toggleSplitter(content, part1, resize1, part2 = null, resize2 = null) {
             s.children[part2 == 0 ? 2 : 0].style.display = "";
             s.style["grid-template-rows"] = Resizable.currentFullsizeGrid2;
         }
-        content.style.cursor = "";
+        content.style.cursor = "zoom-in";
         Resizable.currentFullsizeContent = null;
     } else {
         let s = document.getElementById(resize1);

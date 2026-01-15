@@ -35,10 +35,11 @@
     const fpsFromLocalFile = {};
 
     function opponentHtml(pos, style, click) {
+        if (click) click = `onclick="${click}" style="cursor: zoom-in;"`;
         return `
             <script src='hd/${selectedOpponents[pos]}.js'><${"/"}script>
             <div class="opponent" id="opponent-${pos+1}">
-                <div class="opponent-videoframe" id="opponent-${pos+1}-videoframe" onclick="${click}">
+                <div class="opponent-videoframe" id="opponent-${pos+1}-videoframe" ${click}>
                     <video class="opponent-video-${style}" id="opponent-${pos+1}-video" width="100%" height="100%" preload="auto" hidden>
                         <source src="hd/${selectedOpponents[pos]}.mp4" type="video/mp4">
                     </video>

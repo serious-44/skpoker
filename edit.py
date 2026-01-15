@@ -36,9 +36,9 @@ class VideoProcessor:
             return (self.scenes01, self.scenes04)
         
         try:
-            cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.02)',showinfo", "-f", "null", "-"]
+            #cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.02)',showinfo", "-f", "null", "-"]
             #cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.03)',showinfo", "-f", "null", "-"]
-            #cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.04)',showinfo", "-f", "null", "-"]
+            cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.04)',showinfo", "-f", "null", "-"]
             log(self.id, "Scan scenes 0.05 {cmd}")
             result = subprocess.run(cmd , capture_output=True, text=True)
             lines = result.stderr.splitlines()
