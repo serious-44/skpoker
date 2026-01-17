@@ -216,6 +216,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
         m = re.match(r"/savetime[?]id=(.+)", self.path)
         if m:
             log("HttpServer", f"Save Time {m.group(1)}")
+            self.init(m.group(1))
             name = re.sub("^[^/]*/", "", m.group(1))
             length = int(self.headers['Content-Length'])
             content = self.rfile.read(length)
