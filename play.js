@@ -183,6 +183,7 @@ class Agent {
 
     money = 5000;
     clothes = 4;
+    maxClothes = 4;
     cardsHidden = false;
 
     hand = null;
@@ -194,8 +195,8 @@ class Agent {
     }
 
     getMoney() {
-        if (this.money >= 4000) {
-            return this.money - 4000;
+        if (this.money >= this.maxClothes * 1000) {
+            return this.money - this.maxClothes * 1000;
         } else if (this.money < 1000) {
             return this.money;
         } else {
@@ -204,8 +205,8 @@ class Agent {
     }
 
     getClothes() {
-        if (this.money >= 4000) {
-            return 4;
+        if (this.money >= this.maxClothes * 1000) {
+            return this.maxClothes;
         } else if (this.money < 1000) {
             return 0;
         } else {
@@ -220,6 +221,14 @@ class Agent {
         this.ui.cloth2.src = c > 1 ? "img/misc/shirt.png" : "img/misc/shirt-pawn.png";
         this.ui.cloth3.src = c > 2 ? "img/misc/shirt.png" : "img/misc/shirt-pawn.png";
         this.ui.cloth4.src = c > 3 ? "img/misc/shirt.png" : "img/misc/shirt-pawn.png";
+        this.ui.cloth5.src = c > 4 ? "img/misc/shirt.png" : "img/misc/shirt-pawn.png";
+    }
+
+    setMaxClothes(max) {
+        this.maxClothes = this.clothes = max;
+        if (max < 5) this.ui.cloth5.style.display = "none";
+        if (max < 4) this.ui.cloth4.style.display = "none";
+        this.money = (parseInt(max) + 1) * 1000; //string?
     }
 
     showCards() {
@@ -345,9 +354,7 @@ class Opponent extends Agent {
         this.name = id.replace(/^[0-9-]*/, "").replace(/-.*$/, "");
         this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1);
         this.cardsHidden = true;
-    }
 
-    initUI() {
         this.ui = {
             video: document.getElementById(`opponent-${this.index+1}-video`),
             card1: document.getElementById(`opponent-${this.index+1}-card-1`),
@@ -360,6 +367,7 @@ class Opponent extends Agent {
             cloth2: document.getElementById(`opponent-${this.index+1}-cloth-2`),
             cloth3: document.getElementById(`opponent-${this.index+1}-cloth-3`),
             cloth4: document.getElementById(`opponent-${this.index+1}-cloth-4`),
+            cloth5: document.getElementById(`opponent-${this.index+1}-cloth-5`),
             info1: document.getElementById(`opponent-${this.index+1}-info-1`),
             info2: document.getElementById(`opponent-${this.index+1}-info-2`),
             info3: document.getElementById(`opponent-${this.index+1}-info-3`),
@@ -468,8 +476,8 @@ class Opponent extends Agent {
             this.playVideo("show", "drink", zoom, quiet, section);
         } else if (action == "bye") {
             this.playVideo("show", "drink", zoom, quiet, section);
-        } else if (section < 4 && action != "on" && action != "off") {
-            this.playVideo(action, mod, zoom, quiet, section + 1);
+        //} else if (section < 4 && action != "on" && action != "off") {
+        //    this.playVideo(action, mod, zoom, quiet, section + 1);
         } else {
             error(this.id, `no video for ${action} ${section} ${mod} ${zoom} ${quiet}`);
         }
@@ -625,9 +633,7 @@ class Player extends Agent {
 
     constructor() {
         super();
-    }
 
-    initUI() {
         this.ui = {
             card1: document.getElementById(`player-card-1`),
             card2: document.getElementById(`player-card-2`),
@@ -639,6 +645,7 @@ class Player extends Agent {
             cloth2: document.getElementById(`player-cloth-2`),
             cloth3: document.getElementById(`player-cloth-3`),
             cloth4: document.getElementById(`player-cloth-4`),
+            cloth5: document.getElementById(`player-cloth-5`),
             start: document.getElementById(`player-start`),
             load: document.getElementById(`player-load`),
             ok: document.getElementById(`player-ok`),
@@ -1090,7 +1097,8 @@ class Game {
             let lines = loadedFromLocalFile[id].split(/\r?\n|\r|\n/g);
             let start = "00:00:00.000"
             let action = "-"
-            let section = 4
+            let maxSection = 3
+            let section = 3
             let mod = "none"
             let zoom= "none"
             let quiet = "none"
@@ -1098,14 +1106,17 @@ class Game {
                 let parts = l.split(/[ \t]+/).filter(Boolean);
                 if (parts.length >= 3 && parts[0].match(/^\d\d:\d\d:\d\d:\d\d\d$/) && parts[2].match(/^\d$/)) {
                     let end = parts[0];
-                    if (action == "bye" && (mod == "low" || mod == "high")) mod = "cards"; // FIXME convert timestamp files
-                    if (mod != "youwin") this.addClip(opponent, start, end, action, section, mod, zoom, quiet); //FIXME implement logic for youwin
-                    if (action == "drop") this.addClip(opponent, start, end, "lose", section, mod, zoom, quiet); //not enougt lose clips
-                    if (action == "show" && mod == "cards") {
-                        this.addClip(opponent, start, end, action, section, "low", zoom, quiet); //not enougt high/low clips
-                        this.addClip(opponent, start, end, action, section, "high", zoom, quiet);
+                    if (action != "-") {
+                        if (section > maxSection) maxSection = section;
+                        if (action == "bye" && (mod == "low" || mod == "high")) mod = "cards"; // FIXME convert timestamp files
+                        if (mod != "youwin") this.addClip(opponent, start, end, action, section, mod, zoom, quiet); //FIXME implement logic for youwin
+                        if (action == "drop") this.addClip(opponent, start, end, "lose", section, mod, zoom, quiet); //not enougt lose clips
+                        if (action == "show" && mod == "cards") {
+                            this.addClip(opponent, start, end, action, section, "low", zoom, quiet); //not enougt high/low clips
+                            this.addClip(opponent, start, end, action, section, "high", zoom, quiet);
+                        }
+                        if (action == "show" && mod == "strip") this.addClip(opponent, start, end, action, section, "none", zoom, quiet); //FIXME implement strip button
                     }
-                    if (action == "show" && mod == "strip") this.addClip(opponent, start, end, action, section, "none", zoom, quiet); //FIXME implement strip button
                     start = end;
                     action = parts[1];
                     section = parts[2];
@@ -1127,6 +1138,7 @@ class Game {
                     }
                 }
             }
+            opponent.setMaxClothes(maxSection);
         }
         this.player = new Player();
         this.agents.push(this.player);
@@ -1157,11 +1169,6 @@ class Game {
     }
 
     initUI() {
-        for (let o of this.opponents) {
-            o.initUI();
-        }
-        this.player.initUI();
-
         this.ui = {
             quit: document.getElementById("quit"),
             hide: document.getElementById("hide"),

@@ -1,6 +1,5 @@
+fpsFromLocalFile["4242-gina"] = 25;
 loadedFromLocalFile["4242-gina"] = `
-#preview-time:00:15:28:960
-#preview-crop:82,0,521,362
 00:00:00:040 take  4              quiet
 00:00:04:600 show  4 cards        quiet
 00:00:08:600 show  4 cards        quiet
@@ -253,135 +252,30 @@ loadedFromLocalFile["4242-gina"] = `
 00:15:46:000 show  0 cards   zoom quiet
 00:15:51:680 show  0 cards   zoom quiet
 00:15:55:720 show  0 cards   zoom quiet
-00:16:01:920 show  4         zoom quiet
+00:16:01:920 show  4              quiet
 00:16:15:120 show  4 drink   zoom quiet
 00:16:19:760 off   3                   
 00:16:40:520 on    4                   
 00:16:50:960 -     4                   
-00:16:51:000 show  3 drink   zoom quiet
+00:16:51:040 show  3 drink   zoom quiet
 00:16:57:560 -     3                   
-00:16:57:600 show  3         zoom quiet
+00:16:57:640 show  3              quiet
 00:17:14:640 off   2                   
 00:17:36:720 on    3                   
 00:17:46:240 show  2 drink   zoom quiet
-00:17:50:920 show  2         zoom quiet
+00:17:50:920 show  2              quiet
 00:18:05:800 off   1                   
 00:18:44:440 on    2                   
 00:19:02:360 show  1 drink   zoom      
 00:19:06:760 -     1                   
 00:19:02:360 show  0 drink   zoom      
-00:19:06:760 show  1         zoom quiet
+00:19:06:760 show  1              quiet
 00:19:21:240 off   0                   
 00:20:01:720 on    1                   
 00:20:12:560 show  0 drink   zoom      
 00:20:16:920 broke 0                   
 00:20:48:560 -     0                   
-00:20:52:360 show  3         zoom quiet
-00:20:57:800 -     3                   
-00:16:30:680 show  3              quiet
-00:16:32:200 -     3                   
-00:16:33:280 show  3         zoom quiet
-00:16:36:680 -     3                   
-00:16:49:160 show  4         zoom quiet
-00:16:50:960 -     4                   
-00:17:29:000 show  2              quiet
-00:17:31:160 -     2                   
-00:17:33:680 show  2         zoom quiet
-00:17:36:720 -     2                   
-00:17:44:120 show  3         zoom quiet
-00:17:46:240 -     3                   
-00:18:21:480 show  1              quiet
-00:18:22:880 -     1                   
-00:18:24:360 show  1         zoom quiet
-00:18:29:920 -     1                   
-00:18:31:160 show  1              quiet
-00:18:32:920 -     1                   
-00:18:34:640 show  0         zoom quiet
-00:18:37:480 -     0                   
-00:18:38:920 show  1              quiet
-00:18:40:640 -     1                   
-00:18:42:080 show  0         zoom quiet
-00:18:44:400 -     0                   
-00:18:59:960 show  2         zoom quiet
-00:19:02:360 -     2                   
-00:19:37:800 show  0         zoom quiet
-00:19:42:600 -     0                   
-00:19:52:040 show  0              quiet
-00:19:57:720 -     0                   
-00:19:59:000 show  0              quiet
-00:20:01:680 -     0                   
-00:20:16:920 show  0              quiet
-00:20:20:400 -     0                   
-00:20:33:640 show  0              quiet
-00:20:36:200 -     0                   
-00:20:41:680 show  0              mute 
-00:20:46:040 -     0                   
-00:00:24:800 show  4              quiet
-00:00:26:000 -     4                   
-00:00:27:720 show  4              quiet
-00:00:30:160 -     4                   
-00:01:43:360 show  4              quiet
-00:01:45:000 -     4                   
-00:01:51:560 show  4              quiet
-00:01:52:960 -     4                   
-00:02:01:960 show  3              quiet
-00:02:03:000 -     3                   
-00:02:20:680 show  3              quiet
-00:02:22:840 -     3                   
-00:02:56:520 show  3              quiet
-00:02:57:640 -     3                   
-00:03:18:240 show  3              quiet
-00:03:19:600 -     3                   
-00:03:26:720 show  3              quiet
-00:03:27:640 -     3                   
-00:03:46:000 show  2              quiet
-00:03:48:200 -     2                   
-00:04:17:520 show  2              quiet
-00:04:19:160 -     2                   
-00:05:47:160 show  1              quiet
-00:05:49:200 -     1                   
-00:06:05:480 show  1              quiet
-00:06:07:480 -     1                   
-00:06:15:800 show  1              quiet
-00:06:17:560 -     1                   
-00:07:39:360 show  0              quiet
-00:07:40:200 -     0                   
-00:08:07:080 show  0              quiet
-00:08:09:240 -     0                   
-00:08:48:160 show  4         zoom quiet
-00:08:49:160 -     4                   
-00:09:24:680 show  4         zoom quiet
-00:09:26:200 -     4                   
-00:09:51:120 show  4         zoom quiet
-00:09:52:560 -     4                   
-00:09:54:680 show  4         zoom quiet
-00:09:56:760 -     4                   
-00:10:14:240 show  4         zoom mute 
-00:10:16:320 -     4                   
-00:10:36:480 show  3         zoom quiet
-00:10:37:560 -     3                   
-00:10:39:320 show  3         zoom quiet
-00:10:41:360 -     3                   
-00:11:45:520 show  3         zoom quiet
-00:11:47:240 -     3                   
-00:11:49:760 show  3         zoom quiet
-00:11:51:440 -     3                   
-00:11:59:280 show  2         zoom quiet
-00:12:00:880 -     2                   
-00:12:56:760 show  2         zoom quiet
-00:12:58:600 -     2                   
-00:13:17:840 show  2         zoom quiet
-00:13:19:280 -     2                   
-00:13:38:280 show  1         zoom quiet
-00:13:39:880 -     1                   
-00:14:27:080 show  0         zoom quiet
-00:14:29:200 -     1                   
-00:14:43:720 show  1         zoom mute 
-00:14:45:360 -     1                   
-00:14:45:760 show  1         zoom      
-00:14:48:560 -     1                   
-00:15:11:320 show  0         zoom quiet
-00:15:13:280 -     0                   
-00:16:19:760 show  4              quiet
-00:16:21:920 -     4                   
-`
+00:20:16:920 show  0                   
+00:20:48:560 -     0                   
+
+;`

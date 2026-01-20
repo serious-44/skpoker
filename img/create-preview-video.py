@@ -12,23 +12,37 @@ for fn in files:
     m = re.match(".*[.]js", fn)
     if m:
         # search for the longest sow, no zoom, 4 clothes
-        shows = []
+        shows4 = []
+        shows3 = []
         start = None
         state = "start"
         with open(f'hd/{fn}') as f:
             for line in f:
                 parts = line.strip().split()
-                if state == "show" and len(parts) >= 1 and re.match(r"\d\d:\d\d:\d\d:\d\d\d", parts[0]):
-                    shows.append([scanTime(start), scanTime(parts[0])])
+                if state == "show4" and len(parts) >= 1 and re.match(r"\d\d:\d\d:\d\d:\d\d\d", parts[0]):
+                    shows4.append([scanTime(start), scanTime(parts[0])])
+                    state = "start"
+                if state == "show3" and len(parts) >= 1 and re.match(r"\d\d:\d\d:\d\d:\d\d\d", parts[0]):
+                    shows3.append([scanTime(start), scanTime(parts[0])])
                     state = "start"
                 if len(parts) >= 3 and parts[1] == "show" and parts[2] == "4" and re.match(r"\d\d:\d\d:\d\d:\d\d\d", parts[0]):
                     if  "cards" not in parts and "high" not in parts and "low" not in parts and "zoom" not in parts:
                         start = parts[0]
-                        state = "show"
+                        state = "show4"
+                if len(parts) >= 3 and parts[1] == "show" and parts[2] == "3" and re.match(r"\d\d:\d\d:\d\d:\d\d\d", parts[0]):
+                    if  "cards" not in parts and "high" not in parts and "low" not in parts and "zoom" not in parts:
+                        start = parts[0]
+                        state = "show3"
         
-        if len(shows):
-            max = shows[0]
-            for s in shows:
+        if len(shows4):
+            max = shows4[0]
+            for s in shows4:
+                if s[1] - s[0] > max[1] - max[0]:
+                    max = s
+            previewShow[fn.replace(".js", "")] = max
+        elif len(shows3):
+            max = shows3[0]
+            for s in shows3:
                 if s[1] - s[0] > max[1] - max[0]:
                     max = s
             previewShow[fn.replace(".js", "")] = max

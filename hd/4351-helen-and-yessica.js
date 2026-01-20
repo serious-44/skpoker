@@ -1,68 +1,66 @@
 fpsFromLocalFile["4351-helen-and-yessica"] = 29.97;
 loadedFromLocalFile["4351-helen-and-yessica"] = `
-00:00:00:000 take  4              quiet
-00:00:05:939 take  4              quiet
-00:00:11:011 take  4 bad          quiet
-00:00:16:149 take  4 good              
-00:00:21:355 drop  4              quiet
-00:00:26:560 drop  4              quiet
-00:00:30:497 win   4                   
-00:00:35:302 win   4 youlose           
-00:00:39:573 show  4              quiet
-00:00:47:881 show  4 cards        quiet
-00:00:54:855 show  4 drink             
-00:01:00:861 no    4                   
-00:01:04:565 bye   4                   
-00:01:09:036 bye   4 cards             
-00:01:13:340 no    4 cards             
-00:01:17:511 show  4 low               
-00:01:22:015 show  4 low               
-00:01:27:688 show  4 cards             
-00:01:31:525 show  4 high              
-00:01:36:663 show  4 low               
-00:01:42:636 show  4 high              
-00:01:47:541 drop  4 throw             
-00:01:52:613 show  4 high         quiet
-00:01:59:820 show  4 cards        quiet
-00:02:05:359 show  4 high         quiet
-00:02:11:832 show  4 cards             
-00:02:19:573 show  4 cards        quiet
-00:02:28:215 show  4 high              
-00:02:33:287 show  4 strip        quiet
-00:02:42:095 show  4 strip        quiet
-00:02:51:338 show  4 strip             
-
-00:02:58:078 take  5              quiet
-00:03:02:983 take  5              quiet
-00:03:08:822 take  5 good              
-00:03:14:194 take  5 bad               
-00:03:19:266 drop  5              quiet
-00:03:23:303 drop  5              quiet
-00:03:29:109 win   5                   
-00:03:32:546 win   5 youlose           
-00:03:38:218 show  5 cards        quiet
-00:03:43:557 show  5              quiet
-00:03:49:730 show  5 drink             
-00:03:56:637 no    5                   
-00:04:01:275 bye   5                   
-00:04:06:780 bye   5 cards             
-00:04:11:285 no    5 cards             
-00:04:16:023 show  5 cards             
-00:04:20:394 show  5 low               
-00:04:24:431 show  5 cards             
-00:04:29:536 show  5 high              
-00:04:34:007 show  5 cards             
-00:04:40:080 drop  5 throw             
-00:04:44:685 show  5 high         quiet
-00:04:51:358 show  5 cards        quiet
-00:04:57:164 show  5 cards        quiet
-00:05:03:403 show  5 cards        quiet
-00:05:10:210 show  5 cards             
-00:05:16:083 show  5 cards        quiet
-00:05:19:553 show  5 strip        quiet
-00:05:28:729 show  5 strip        quiet
-00:05:38:038 show  5 strip             
-
+00:00:00:000 take  5              quiet
+00:00:05:939 take  5              quiet
+00:00:11:011 take  5 bad          quiet
+00:00:16:149 take  5 good              
+00:00:21:355 drop  5              quiet
+00:00:26:560 drop  5              quiet
+00:00:30:497 win   5                   
+00:00:35:302 win   5 youlose           
+00:00:39:573 show  5              quiet
+00:00:47:881 show  5 cards        quiet
+00:00:54:855 show  5 drink             
+00:01:00:861 no    5                   
+00:01:04:565 bye   5                   
+00:01:09:036 bye   5 cards             
+00:01:13:340 no    5 cards             
+00:01:17:511 show  5 low               
+00:01:22:015 show  5 low               
+00:01:27:688 show  5 cards             
+00:01:31:525 show  5 high              
+00:01:36:663 show  5 low               
+00:01:42:636 show  5 high              
+00:01:47:541 drop  5 throw             
+00:01:52:613 show  5 high         quiet
+00:01:59:820 show  5 cards        quiet
+00:02:05:359 show  5 high         quiet
+00:02:11:832 show  5 cards             
+00:02:19:573 show  5 cards        quiet
+00:02:28:215 show  5 high              
+00:02:33:287 show  5 strip        quiet
+00:02:42:095 show  5 strip        quiet
+00:02:51:338 show  5 strip             
+00:02:58:078 take  4              quiet
+00:03:02:983 take  4              quiet
+00:03:08:822 take  4 good              
+00:03:14:194 take  4 bad               
+00:03:19:266 drop  4              quiet
+00:03:23:303 drop  4              quiet
+00:03:29:109 win   4                   
+00:03:32:546 win   4 youlose           
+00:03:38:218 show  4 cards        quiet
+00:03:43:557 show  4              quiet
+00:03:49:730 show  4 drink             
+00:03:56:637 no    4                   
+00:04:01:275 bye   4                   
+00:04:06:780 bye   4 cards             
+00:04:11:285 no    4 cards             
+00:04:16:023 show  4 cards             
+00:04:20:394 show  4 low               
+00:04:24:431 show  4 cards             
+00:04:29:536 show  4 high              
+00:04:34:007 show  4 cards             
+00:04:40:080 drop  4 throw             
+00:04:44:685 show  4 high         quiet
+00:04:51:358 show  4 cards        quiet
+00:04:57:164 show  4 cards        quiet
+00:05:03:403 show  4 cards        quiet
+00:05:10:210 show  4 cards             
+00:05:16:083 show  4 cards        quiet
+00:05:19:553 show  4 strip        quiet
+00:05:28:729 show  4 strip        quiet
+00:05:38:038 show  4 strip             
 00:05:47:648 take  3              quiet
 00:05:52:419 take  3              quiet
 00:05:57:357 take  3 good              
@@ -91,7 +89,6 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:08:13:260 show  3 strip        quiet
 00:08:23:704 show  3 strip        quiet
 00:08:29:276 show  3 strip        quiet
-
 00:08:42:389 take  2              quiet
 00:08:47:728 take  2              quiet
 00:08:53:200 take  2 good         quiet
@@ -122,7 +119,6 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:11:14:374 show  2 strip        quiet
 00:11:25:118 show  2 strip        quiet
 00:11:35:262 show  2 strip             
-
 00:11:45:706 take  1              quiet
 00:11:51:545 take  1              quiet
 00:11:56:850 take  1 good              
@@ -153,7 +149,6 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:14:16:723 show  1 strip        quiet
 00:14:24:464 show  1 strip        quiet
 00:14:31:071 show  1 strip        quiet
-
 00:14:39:379 take  0              quiet
 00:14:45:352 take  0              quiet
 00:14:50:791 take  0 good              
@@ -182,69 +177,66 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:16:54:181 show  0 strip        quiet
 00:17:02:523 show  0 strip        quiet
 00:17:13:267 show  0 strip        quiet
-
-00:17:28:949 take  4         zoom quiet
-00:17:33:921 take  4         zoom quiet
-00:17:39:393 take  4 good    zoom      
-00:17:44:498 take  4 bad     zoom      
-00:17:49:469 drop  4         zoom      
-00:17:55:809 drop  4         zoom quiet
-00:18:01:882 win   4         zoom      
-00:18:06:420 win   4 youlose zoom      
-00:18:10:858 show  4         zoom quiet
-00:18:17:331 show  4 drink   zoom      
-00:18:23:804 show  4 cards   zoom quiet
-00:18:28:375 no    4         zoom      
-00:18:33:480 bye   4         zoom      
-00:18:37:284 bye   4 cards   zoom      
-00:18:42:089 no    4 cards   zoom      
-00:18:46:460 show  4 low     zoom      
-00:18:50:430 show  4 low     zoom      
-00:18:54:501 show  4 cards   zoom      
-00:18:58:739 show  4 cards   zoom      
-00:19:02:876 show  4 cards   zoom      
-00:19:07:848 drop  4 throw   zoom      
-00:19:12:920 show  4 cards   zoom quiet
-00:19:19:059 show  4 cards   zoom quiet
-00:19:25:232 show  4 high    zoom quiet
-00:19:30:838 show  4 high    zoom quiet
-00:19:37:978 show  4 cards   zoom quiet
-00:19:45:352 show  4 cards   zoom quiet
-00:19:50:457 show  4 strip   zoom quiet
-00:19:59:633 show  4 strip   zoom quiet
-00:20:09:476 show  4 strip   zoom      
-
-00:20:19:052 take  5         zoom quiet
-00:20:23:090 take  5         zoom quiet
-00:20:28:462 show  5 high    zoom      
-00:20:33:166 take  5 bad     zoom      
-00:20:37:704 drop  5         zoom quiet
-00:20:42:342 drop  5         zoom quiet
-00:20:47:948 win   5 youlose zoom      
-00:20:52:686 drop  5         zoom      
-00:20:58:692 show  5         zoom quiet
-00:21:03:830 show  5 drink   zoom      
-00:21:10:204 show  5 cards   zoom quiet
-00:21:15:843 no    5         zoom      
-00:21:20:380 bye   5         zoom      
-00:21:24:618 bye   5 cards   zoom      
-00:21:28:789 no    5 cards   zoom      
-00:21:33:360 show  5 low     zoom      
-00:21:37:631 show  5 cards   zoom      
-00:21:40:767 show  5 cards   zoom      
-00:21:45:439 show  5 high    zoom      
-00:21:50:143 show  5 cards   zoom      
-00:21:57:518 drop  5 throw   zoom      
-00:22:01:788 show  5 cards   zoom quiet
-00:22:07:961 show  5 cards   zoom quiet
-00:22:15:302 show  5 cards   zoom quiet
-00:22:22:075 show  5 high    zoom quiet
-00:22:28:315 show  5 cards   zoom quiet
-00:22:33:787 show  5 cards   zoom quiet
-00:22:41:762 show  5 strip   zoom quiet
-00:22:51:839 show  5 strip   zoom quiet
-00:23:05:018 show  5 strip   zoom quiet
-
+00:17:28:949 take  5         zoom quiet
+00:17:33:921 take  5         zoom quiet
+00:17:39:393 take  5 good    zoom      
+00:17:44:498 take  5 bad     zoom      
+00:17:49:469 drop  5         zoom      
+00:17:55:809 drop  5         zoom quiet
+00:18:01:882 win   5         zoom      
+00:18:06:420 win   5 youlose zoom      
+00:18:10:858 show  5         zoom quiet
+00:18:17:331 show  5 drink   zoom      
+00:18:23:804 show  5 cards   zoom quiet
+00:18:28:375 no    5         zoom      
+00:18:33:480 bye   5         zoom      
+00:18:37:284 bye   5 cards   zoom      
+00:18:42:089 no    5 cards   zoom      
+00:18:46:460 show  5 low     zoom      
+00:18:50:430 show  5 low     zoom      
+00:18:54:501 show  5 cards   zoom      
+00:18:58:739 show  5 cards   zoom      
+00:19:02:876 show  5 cards   zoom      
+00:19:07:848 drop  5 throw   zoom      
+00:19:12:920 show  5 cards   zoom quiet
+00:19:19:059 show  5 cards   zoom quiet
+00:19:25:232 show  5 high    zoom quiet
+00:19:30:838 show  5 high    zoom quiet
+00:19:37:978 show  5 cards   zoom quiet
+00:19:45:352 show  5 cards   zoom quiet
+00:19:50:457 show  5 strip   zoom quiet
+00:19:59:633 show  5 strip   zoom quiet
+00:20:09:476 show  5 strip   zoom      
+00:20:19:052 take  4         zoom quiet
+00:20:23:090 take  4         zoom quiet
+00:20:28:462 show  4 high    zoom      
+00:20:33:166 take  4 bad     zoom      
+00:20:37:704 drop  4         zoom quiet
+00:20:42:342 drop  4         zoom quiet
+00:20:47:948 win   4 youlose zoom      
+00:20:52:686 drop  4         zoom      
+00:20:58:692 show  4         zoom quiet
+00:21:03:830 show  4 drink   zoom      
+00:21:10:204 show  4 cards   zoom quiet
+00:21:15:843 no    4         zoom      
+00:21:20:380 bye   4         zoom      
+00:21:24:618 bye   4 cards   zoom      
+00:21:28:789 no    4 cards   zoom      
+00:21:33:360 show  4 low     zoom      
+00:21:37:631 show  4 cards   zoom      
+00:21:40:767 show  4 cards   zoom      
+00:21:45:439 show  4 high    zoom      
+00:21:50:143 show  4 cards   zoom      
+00:21:57:518 drop  4 throw   zoom      
+00:22:01:788 show  4 cards   zoom quiet
+00:22:07:961 show  4 cards   zoom quiet
+00:22:15:302 show  4 cards   zoom quiet
+00:22:22:075 show  4 high    zoom quiet
+00:22:28:315 show  4 cards   zoom quiet
+00:22:33:787 show  4 cards   zoom quiet
+00:22:41:762 show  4 strip   zoom quiet
+00:22:51:839 show  4 strip   zoom quiet
+00:23:05:018 show  4 strip   zoom quiet
 00:23:16:830 take  3         zoom      
 00:23:21:468 take  3         zoom quiet
 00:23:28:275 take  3         zoom quiet
@@ -277,7 +269,6 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:26:02:095 show  3 strip   zoom quiet
 00:26:13:574 show  3 strip   zoom quiet
 00:26:22:549 show  3 strip   zoom quiet
-
 00:26:34:862 take  2         zoom quiet
 00:26:41:935 take  2         zoom quiet
 00:26:48:575 take  2         zoom      
@@ -308,7 +299,6 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:29:07:381 show  2 strip   zoom quiet
 00:29:21:428 show  2 strip   zoom quiet
 00:29:33:140 show  2 strip   zoom quiet
-
 00:29:46:186 take  1         zoom quiet
 00:29:50:591 take  1         zoom quiet
 00:29:56:897 take  1 good    zoom      
@@ -340,7 +330,6 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:32:13:834 show  1 strip   zoom quiet
 00:32:23:577 show  1 strip   zoom quiet
 00:32:39:526 show  1 strip   zoom quiet
-
 00:32:57:511 take  0         zoom      
 00:33:02:616 take  0         zoom quiet
 00:33:08:355 take  0         zoom      
@@ -373,13 +362,13 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:35:43:043 show  0 strip   zoom quiet
 00:35:57:024 show  0 strip   zoom quiet
 00:36:10:404 show  0 strip   zoom quiet
-00:36:28:388 intro 4                   
-00:36:40:167 intro 4                   
-00:36:56:216 -     4              quiet
-00:36:57:284 off   3                   
-00:37:13:033 -     3              quiet
-00:37:13:901 on    4                   
-00:37:29:082 -     4              quiet
+00:36:28:388 intro 5                   
+00:36:40:167 intro 5                   
+00:36:56:216 -     5              quiet
+00:36:57:284 off   4                   
+00:37:13:033 -     4              quiet
+00:37:13:901 on    5                   
+00:37:29:082 -     5              quiet
 00:37:29:249 off   3                   
 00:37:49:469 -     3              quiet
 00:37:50:037 on    4                   
@@ -398,4 +387,5 @@ loadedFromLocalFile["4351-helen-and-yessica"] = `
 00:39:59:199 -     1              quiet
 00:40:00:267 broke 0                   
 00:40:49:416 -     0 end          quiet
+
 ;`
