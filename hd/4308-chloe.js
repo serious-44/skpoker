@@ -1,3 +1,4 @@
+fpsFromLocalFile["4308-chloe"] = 25;
 loadedFromLocalFile["4308-chloe"] = `
 00:00:00:000 take  4              quiet
 00:00:04:640 take  4 good              
@@ -84,7 +85,7 @@ loadedFromLocalFile["4308-chloe"] = `
 00:07:53:880 drop  3         zoom quiet
 00:07:58:640 drop  3         zoom quiet
 00:08:03:240 win   3         zoom      
-00:08:08:160 win   3 woulose zoom      
+00:08:08:160 win   3 youlose zoom      
 00:08:13:200 lose  3         zoom      
 00:08:18:040 show  3 cards   zoom quiet
 00:08:22:440 show  3         zoom quiet
@@ -414,4 +415,5 @@ loadedFromLocalFile["4308-chloe"] = `
 00:43:07:000 -     1              quiet
 00:43:07:840 broke 0                   
 00:44:08:400 -     0
-`
+
+;`

@@ -1,3 +1,4 @@
+fpsFromLocalFile["4245-amanda"] = 25;
 loadedFromLocalFile["4245-amanda"] = `
 00:00:00:000 take  4              quiet
 00:00:03:880 take  4 good              
@@ -111,7 +112,7 @@ loadedFromLocalFile["4245-amanda"] = `
 00:11:14:120 show  3 strip        quiet
 00:11:33:200 show  3 strip        quiet
 00:11:49:400 show  3 strip        quiet
-00:12:10:120 take  3 strip             
+00:12:10:120 take  3 good             
 00:12:14:120 take  3 good              
 00:12:17:680 take  3 good              
 00:12:21:560 take  3 bad               
@@ -404,5 +405,4 @@ loadedFromLocalFile["4245-amanda"] = `
 00:42:38:280 broke 0                   
 00:43:42:280 -     0
 
-
-`
+;`

@@ -1,3 +1,4 @@
+fpsFromLocalFile["4286-olivia"] = 25;
 loadedFromLocalFile["4286-olivia"] = `
 00:00:00:000 take  4                   
 00:00:04:200 take  4 good              
@@ -28,8 +29,8 @@ loadedFromLocalFile["4286-olivia"] = `
 00:01:54:960 bye   4                   
 00:01:59:480 bye   4 cards             
 00:02:04:080 no    4 cards             
-00:02:08:480 low   4 cards             
-00:02:12:000 low   4 cards             
+00:02:08:480 show  4 low             
+00:02:12:000 show  4 low             
 00:02:14:920 show  4 cards             
 00:02:20:280 show  4 strip        quiet
 00:02:34:000 show  4 strip        quiet
@@ -391,4 +392,5 @@ loadedFromLocalFile["4286-olivia"] = `
 00:43:32:720 -     1              quiet
 00:43:33:080 broke 0                   
 00:44:33:560 -     0 end          quiet
-`
+
+;`

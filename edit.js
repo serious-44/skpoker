@@ -95,6 +95,7 @@ class Editor {
 
             videoInfo:      ["video-info"],
             startInfo:      ["start-info"],
+            clipInfo:       ["clip-info"],
             videoPosition:  ["video-position"],
             
             videoStart:     ["video-start",       "Home",             () => this.videoPositionChanged(0)],
@@ -152,6 +153,7 @@ class Editor {
         ctx.fillText("Waiting for scene markers...",20,20);
 
         this.ui.startInfo.width = this.ui.startInfo.offsetWidth;
+        this.ui.clipInfo.width = this.ui.clipInfo.offsetWidth;
 
         let keylistener = (event) => {
             let key = `${event.code}${event.shiftKey ? "-shift" : ""}${event.ctrlKey ? "-ctrl" : ""}${event.metaKey ? "-meta" : ""}`;
@@ -218,7 +220,7 @@ class Editor {
                 ctx.stroke();
             }
         }
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = "darkgreen";
         for (let i = this.frameInfo.length; i>= 0; i--) {
             let v = this.frameInfo[i];
             if (v == 255) {
@@ -232,7 +234,7 @@ class Editor {
                 //let pos = Math.round(i * scale) - 0.5;
                 let pos = i * scale;
                 ctx.beginPath();
-                ctx.moveTo(pos, 20);
+                ctx.moveTo(pos, 17);
                 ctx.lineTo(pos, 30);
                 ctx.stroke();
             }
@@ -263,6 +265,28 @@ class Editor {
         }
     }
 
+    renderClipInfo() {
+        let canvas = this.ui.clipInfo;
+        //canvas.width = canvas.offsetWidth;
+        let scale = canvas.width / this.frameInfo.length;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let edit = this.getLines();
+
+        ctx.strokeStyle = "brown";
+        for (let l of edit.lines) {
+            let ts = this.scanTime(l);
+            if (ts) {
+                let pos = this.frameNumber(ts) * scale;
+                ctx.beginPath();
+                ctx.moveTo(pos, 23);
+                ctx.lineTo(pos, 30);
+                ctx.stroke();
+            }
+        }
+    }
+
     videoPositionChanged(ts = null, pauseVideo = true) {
         if (this.inVideoPositionChanged) {
             debug("Video", "inVideoPositionChanged");
@@ -279,7 +303,6 @@ class Editor {
             if (pauseVideo && !this.ui.mainVideo.paused) {
                 this.ui.mainVideo.pause();
                 this.ui.mainVideoFrame.style.backgroundColor = null;
-                this.ui.mai
             }
             if (ts === null) {
                 ts = this.ui.mainVideo.currentTime;

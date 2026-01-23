@@ -149,7 +149,7 @@ loadedFromLocalFile["caitlyn"] = `
 00:11:17:000 show  2 cards             
 00:11:20:920 show  2 cards             
 00:11:24:360 bye   2 cards             
-00:11:27:360 cards 2 low             
+00:11:27:360 show  2 low             
 00:11:30:040 bye   2 cards             
 00:11:33:680 show  2 cards             
 00:11:37:480 bye   2 cards             
