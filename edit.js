@@ -455,7 +455,12 @@ class Editor {
 
             let c = this.getLines();
             //let start = c.lines[c.row].slice(0, 12);
-            let l1 = `${this.formatTime(this.startTime)} ${action.padEnd(5, " ")} ${pieces} ${(mod ? mod : "").padEnd(7, " ")} ${zoom === true ? "zoom" : "    "} ${quiet ? "quiet" : "     "}`;
+            let l1;
+            if (action == "-") {
+                l1 = `${this.formatTime(this.startTime)} ${action.padEnd(5, " ")} ${pieces}`;
+            } else {
+                l1 = `${this.formatTime(this.startTime)} ${action.padEnd(5, " ")} ${pieces} ${(mod ? mod : "").padEnd(7, " ")} ${zoom === true ? "zoom" : "    "} ${quiet ? "quiet" : "     "}`;
+            }
             c.lines[c.row] = l1;
             if (this.ui.editorAdd.checked && mod != "end") {
                 c.row++;

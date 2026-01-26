@@ -132,7 +132,7 @@
     background-color: transparent;
 }
 
-#opponents div .opponent-table .opponent-links, #opponents div .opponent-table a {
+#opponents div .opponent-table .opponent-links, #opponents div .opponent-table a, #opponents div .opponent-table span {
     padding: 2px 2px 2px 7px;
     font: 10px sans-serif;
     margin: 0;
@@ -140,7 +140,7 @@
     background-color: transparent;
 }
 
-#opponents div .opponent-table:hover .opponent-links, #opponents div .opponent-table:hover a {
+#opponents div .opponent-table:hover .opponent-links, #opponents div .opponent-table:hover a, #opponents div .opponent-table:hover span {
     margin: 0;
     color: black;
 }

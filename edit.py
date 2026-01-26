@@ -111,10 +111,12 @@ class VideoProcessor:
         for l in la:
             res.append(l)
         for fn in s1:
-            if res[fn-1] < 250 and res[fn-2] < 250:
-                res[fn] = 254 #FIXME test out of bounds
+            if fn < len(res):
+                if res[fn-1] < 250 and res[fn-2] < 250:
+                    res[fn] = 254 #FIXME test out of bounds
         for fn in s4:
-            res[fn] = 255 #FIXME test out of bounds
+            if fn < len(res):
+                res[fn] = 255 #FIXME test out of bounds
         for i in range(2, len(res) - 3):
             if res[i] == 255:
                 res[i-1] = 0
