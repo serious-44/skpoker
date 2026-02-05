@@ -37,9 +37,9 @@ class VideoProcessor:
         
         try:
             #cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.02)',showinfo", "-f", "null", "-"]
-            #cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.03)',showinfo", "-f", "null", "-"]
-            cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.04)',showinfo", "-f", "null", "-"]
-            log(self.id, "Scan scenes 0.05 {cmd}")
+            cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.03)',showinfo", "-f", "null", "-"]
+            #cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.04)',showinfo", "-f", "null", "-"]
+            log(self.id, f"Scan scenes 0.05 {cmd}")
             result = subprocess.run(cmd , capture_output=True, text=True)
             lines = result.stderr.splitlines()
             self.scenes01 = []
@@ -49,7 +49,7 @@ class VideoProcessor:
                     self.scenes01.append(self.ts2frame(m.group(1)))
 
             cmd = ['ffmpeg', '-i', f"hd/{self.id}.mp4", "-filter:v", "select='gt(scene,0.2)',showinfo", "-f", "null", "-"]
-            log(self.id, "Scan scenes 0.2 {cmd}")
+            log(self.id, f"Scan scenes 0.2 {cmd}")
             result = subprocess.run(cmd, capture_output=True, text=True)
             lines = result.stderr.splitlines()
             self.scenes04 = []
@@ -132,7 +132,7 @@ class VideoProcessor:
         
         try:
             cmd = ['ffprobe', f"hd/{self.id}.mp4"]
-            log(self.id, "Scan fps {cmd}")
+            log(self.id, f"Scan fps {cmd}")
             result = subprocess.run(cmd , capture_output=True, text=True)
             lines = result.stderr.splitlines()
             self.scenes01 = []

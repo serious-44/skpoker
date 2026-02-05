@@ -1224,9 +1224,11 @@ class Game {
             let [action, mod] = rnd > 0.7 ? ["no", o.state >= State.Fold ? "none" : "cards"] : ["show", "drink"];
             if (o.playingQueue.some((c) => (c.mod == "drink" || c.action == "no"))) {
                 debug("game", `${o.id} drink already in queue`);
-            } else {
+            } else if ("show-drink-any-any" in o.clips) {
                 debug("game", `${o.id} ${action} ${mod}`);
                 o.playVideo(action, mod);
+            } else {
+                debug("game", `${o.id} no drink clips`);
             }
         }
     }
